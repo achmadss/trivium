@@ -2,12 +2,12 @@ package dev.achmad.data.api.opentdb.repository
 
 import dev.achmad.core.network.APICallResult
 import dev.achmad.core.network.await
-import dev.achmad.data.api.opentdb.model.category.TriviaCategory
-import dev.achmad.data.api.opentdb.model.difficulty.TriviaDifficulty
+import dev.achmad.core.model.category.TriviaCategory
+import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.data.api.opentdb.model.response.session.RequestSessionTokenResponse
 import dev.achmad.data.api.opentdb.model.response.session.ResetSessionTokenResponse
 import dev.achmad.data.api.opentdb.model.response.trivia.GetTriviaResponse
-import dev.achmad.data.api.opentdb.model.type.TriviaType
+import dev.achmad.core.model.type.TriviaType
 import dev.achmad.data.api.opentdb.preference.OpenTriviaDatabasePreference
 import dev.achmad.data.api.opentdb.service.OpenTriviaDatabaseService
 
@@ -38,7 +38,7 @@ class OpenTriviaDatabaseRepository(
         type: TriviaType? = null,
     ): APICallResult<GetTriviaResponse> {   
 
-        fun TriviaCategory?.orRandom() = this?.id ?: TriviaCategory.entries.random().id
+        fun TriviaCategory?.orRandom() = this?.id ?: TriviaCategory.entries.filter { it.id != -1 }.random().id
         fun TriviaDifficulty?.orRandom() = this?.key ?: TriviaDifficulty.entries.random().key
         fun TriviaType?.orRandom() = this?.key ?: TriviaType.entries.random().key
 

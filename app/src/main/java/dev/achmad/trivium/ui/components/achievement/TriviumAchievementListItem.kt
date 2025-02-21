@@ -1,4 +1,4 @@
-package dev.achmad.trivium.ui.components
+package dev.achmad.trivium.ui.components.achievement
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

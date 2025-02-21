@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.achmad.trivium.R
-import dev.achmad.trivium.ui.components.TriviumAchievementListItem
+import dev.achmad.trivium.ui.components.achievement.TriviumAchievementListItem
 import dev.achmad.trivium.ui.components.TriviumTopBar
 import dev.achmad.trivium.ui.theme.background100
 import kotlinx.serialization.Serializable
@@ -26,31 +26,32 @@ import kotlinx.serialization.Serializable
 object AchievementRoute
 
 fun NavGraphBuilder.achievement(
+    onBack: () -> Unit,
 ) {
     composable<AchievementRoute> {
-        AchievementScreen()
+        AchievementScreen(onBack = onBack)
     }
 }
 
 @Composable
 fun AchievementScreen(
-
+    onBack: () -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TriviumTopBar(
                 text = "Achievement",
-                onBack = {}
+                onBack = onBack
             )
-        }
+        },
+        containerColor = background100
     ) { contentPadding ->
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
-                .background(background100)
             ,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

@@ -14,10 +14,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.achmad.core.TRIVIUM_ACTION
 import dev.achmad.trivium.ui.screens.achievement.AchievementRoute
 import dev.achmad.trivium.ui.screens.achievement.achievement
+import dev.achmad.trivium.ui.screens.category.CategoryRoute
+import dev.achmad.trivium.ui.screens.category.category
 import dev.achmad.trivium.ui.screens.main_menu.MainMenuRoute
 import dev.achmad.trivium.ui.screens.main_menu.mainMenu
-import dev.achmad.trivium.ui.screens.splash.SplashRoute
-import dev.achmad.trivium.ui.screens.splash.splash
+import dev.achmad.trivium.ui.screens.new_game.NewGameRoute
+import dev.achmad.trivium.ui.screens.new_game.newGame
 import dev.achmad.trivium.ui.theme.LocalNavController
 import dev.achmad.trivium.ui.theme.TriviumTheme
 import soup.compose.material.motion.animation.materialSharedAxisXIn
@@ -40,33 +42,51 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = SplashRoute,
+                    startDestination = MainMenuRoute,
                     enterTransition = { materialSharedAxisXIn(true, slideDistance) },
                     exitTransition = { materialSharedAxisXOut(true, slideDistance) },
                     popEnterTransition = { materialSharedAxisXIn(false, slideDistance) },
                     popExitTransition = { materialSharedAxisXOut(false, slideDistance) }
                 ) {
-                    splash(
-                        onFinish = {
-                            mainViewModel.onNewIntent(intent)
-                        }
-                    )
+                    // TODO google how to handle intent from splash
                     mainMenu(
                         onClickPlay = {
-                            // TODO: navigate to new game screen
+                            navController.navigate(NewGameRoute)
                         },
                         onClickAchievements = {
-                            // TODO: navigate to achievements screen
+                            navController.navigate(AchievementRoute)
                         }
                     )
-                    achievement()
+                    achievement(
+                        onBack = {
+                            navController.navigateUp()
+                        }
+                    )
+                    category(
+                        onBack = {
+                            navController.navigateUp()
+                        }
+                    )
+                    newGame(
+                        onBack = {
+                            navController.navigateUp()
+                        },
+                        onNavigateToCategory = {
+                            navController.navigate(CategoryRoute)
+                        },
+                        onNavigateToGame = {
+                            // TODO navigate to game screen
+                        }
+                    )
                 }
 
                 LaunchedEffect(newIntent) {
                     val intent = newIntent ?: return@LaunchedEffect
                     when(intent.getStringExtra(TRIVIUM_ACTION)) {
                         // handle intents here
-                        else -> navController.navigate(MainMenuRoute)
+                        else -> {
+                            navController.navigate(MainMenuRoute)
+                        }
                     }
                     mainViewModel.resetIntent()
                 }

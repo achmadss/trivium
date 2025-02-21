@@ -22,3 +22,6 @@ const val OPEN_TRIVIA_DATABASE_API_TOKEN_PREFIX = "api_token.php"
 const val CHANNEL_ID = "trivium_app_notification_channel"
 const val NOTIFICATION_ID = 100
 const val TRIVIUM_ACTION = "TRIVIUM_ACTION"
+
+// Messages
+const val unknownError = "Unknown Error"

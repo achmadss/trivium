@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_game_casual">Casual</string>
+    <string name="new_game_casual_description">No time limit, 20 questions</string>
+    <string name="new_game_time_attack">Time Attack</string>
+    <string name="new_game_time_attack_description">60 second time limit, 100 questions, no time limit for each question</string>
+</resources>
