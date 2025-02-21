@@ -12,6 +12,10 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import dagger.hilt.android.AndroidEntryPoint
 import dev.achmad.core.TRIVIUM_ACTION
+import dev.achmad.trivium.ui.screens.achievement.AchievementRoute
+import dev.achmad.trivium.ui.screens.achievement.achievement
+import dev.achmad.trivium.ui.screens.main_menu.MainMenuRoute
+import dev.achmad.trivium.ui.screens.main_menu.mainMenu
 import dev.achmad.trivium.ui.screens.splash.SplashRoute
 import dev.achmad.trivium.ui.screens.splash.splash
 import dev.achmad.trivium.ui.theme.LocalNavController
@@ -47,13 +51,22 @@ class MainActivity : ComponentActivity() {
                             mainViewModel.onNewIntent(intent)
                         }
                     )
+                    mainMenu(
+                        onClickPlay = {
+                            // TODO: navigate to new game screen
+                        },
+                        onClickAchievements = {
+                            // TODO: navigate to achievements screen
+                        }
+                    )
+                    achievement()
                 }
 
                 LaunchedEffect(newIntent) {
                     val intent = newIntent ?: return@LaunchedEffect
                     when(intent.getStringExtra(TRIVIUM_ACTION)) {
                         // handle intents here
-                        else -> Unit
+                        else -> navController.navigate(MainMenuRoute)
                     }
                     mainViewModel.resetIntent()
                 }

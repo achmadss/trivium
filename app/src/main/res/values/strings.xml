@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Trivium</string>
+
+    <!--  Main Menu  -->
+    <string name="main_menu_play">Play</string>
+    <string name="main_menu_achievement">Achievements</string>
+
+    <!--  Achievement  -->
+    <string name="achievement_example">Achievement %s</string>
 </resources>
