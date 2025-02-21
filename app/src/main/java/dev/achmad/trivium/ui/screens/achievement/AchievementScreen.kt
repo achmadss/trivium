@@ -3,9 +3,7 @@ package dev.achmad.trivium.ui.screens.achievement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -18,10 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumAchievementListItem
 import dev.achmad.trivium.ui.components.TriviumTopBar
 import dev.achmad.trivium.ui.theme.background100
-import dev.achmad.trivium.R
 import kotlinx.serialization.Serializable
 
 @Serializable
