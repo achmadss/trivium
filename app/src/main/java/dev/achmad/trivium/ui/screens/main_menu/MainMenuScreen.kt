@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,7 +26,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
+import dev.achmad.trivium.ui.screens.new_game.NewGameScreenViewModel
 import dev.achmad.trivium.ui.theme.background100
+import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,17 +40,19 @@ fun NavGraphBuilder.mainMenu(
 ) {
     composable<MainMenuRoute> {
         MainMenuScreen(
-            onClickPlay,
-            onClickAchievements
+            onClickPlay = onClickPlay,
+            onClickAchievements = onClickAchievements,
         )
     }
 }
 
 @Composable
 fun MainMenuScreen(
+    newGameScreenViewModel: NewGameScreenViewModel = activityViewModel(),
     onClickPlay: () -> Unit = {},
     onClickAchievements: () -> Unit = {}
 ) {
+    val categoryScreenState by newGameScreenViewModel.state.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,6 +80,7 @@ fun MainMenuScreen(
                 icon = ImageVector.vectorResource(R.drawable.trophy),
                 onClick = onClickAchievements
             )
+            Text(categoryScreenState.category.displayName)
         }
     }
 }

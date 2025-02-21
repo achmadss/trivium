@@ -53,7 +53,7 @@ fun TriviumTheme(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(background60),
+                .background(background100),
         ) {
             content()
         }

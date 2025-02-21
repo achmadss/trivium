@@ -19,6 +19,8 @@ import dev.achmad.trivium.ui.utils.rememberResourceBitmapPainter
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
+// TODO might be removed later
+
 @Serializable
 object SplashRoute
 
