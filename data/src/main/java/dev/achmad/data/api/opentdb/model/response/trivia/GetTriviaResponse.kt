@@ -13,5 +13,6 @@ data class GetTriviaResponse(
         @SerializedName("question") val question: String,
         @SerializedName("correct_answer") val correctAnswer: String,
         @SerializedName("incorrect_answers") val incorrectAnswers: List<String>,
+        val options: List<String> = incorrectAnswers + correctAnswer,
     )
 }

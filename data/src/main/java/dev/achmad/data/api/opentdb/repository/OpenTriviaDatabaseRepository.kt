@@ -1,5 +1,8 @@
 package dev.achmad.data.api.opentdb.repository
 
+import dev.achmad.core.OPEN_TRIVIA_DATABASE_RATE_LIMITED
+import dev.achmad.core.OPEN_TRIVIA_DATABASE_TOKEN_EXHAUSTED
+import dev.achmad.core.OPEN_TRIVIA_DATABASE_TOKEN_EXPIRED
 import dev.achmad.core.network.APICallResult
 import dev.achmad.core.network.await
 import dev.achmad.core.model.category.TriviaCategory
@@ -33,22 +36,25 @@ class OpenTriviaDatabaseRepository(
 
     suspend fun getTrivia(
         amount: Int,
-        category: TriviaCategory? = null,
-        difficulty: TriviaDifficulty? = null,
-        type: TriviaType? = null,
+        category: TriviaCategory,
+        difficulty: TriviaDifficulty,
+        type: TriviaType,
     ): APICallResult<GetTriviaResponse> {   
 
-        fun TriviaCategory?.orRandom() = this?.id ?: TriviaCategory.entries.filter { it.id != -1 }.random().id
-        fun TriviaDifficulty?.orRandom() = this?.key ?: TriviaDifficulty.entries.random().key
-        fun TriviaType?.orRandom() = this?.key ?: TriviaType.entries.random().key
+        fun TriviaCategory.orRandom() : Int {
+            if (this.id == -1) {
+                return TriviaCategory.entries.filter { it.id != -1 }.random().id
+            }
+            return this.id
+        }
 
         while (true) {
             val response = await {
                 service.getTrivia(
                     amount = amount,
                     category = category.orRandom(),
-                    difficulty = difficulty.orRandom(),
-                    type = type.orRandom(),
+                    difficulty = difficulty.key,
+                    type = type.key,
                     token = preference.sessionToken().get()
                 )
             }
@@ -56,8 +62,9 @@ class OpenTriviaDatabaseRepository(
             when(response) {
                 is APICallResult.Success -> {
                     when (response.data.responseCode) {
-                        3 -> requestSessionToken() // token expired
-                        4 -> resetSessionToken(preference.sessionToken().get()) // reset exhausted token
+                        OPEN_TRIVIA_DATABASE_TOKEN_EXPIRED -> requestSessionToken() // token expired
+                        OPEN_TRIVIA_DATABASE_TOKEN_EXHAUSTED -> resetSessionToken(preference.sessionToken().get()) // reset exhausted token
+                        OPEN_TRIVIA_DATABASE_RATE_LIMITED -> return APICallResult.Error(429, Exception("Too Many Request"))
                         else -> return response
                     }
                 }

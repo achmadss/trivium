@@ -4,4 +4,197 @@
     <string name="new_game_casual_description">No time limit, 20 questions</string>
     <string name="new_game_time_attack">Time Attack</string>
     <string name="new_game_time_attack_description">60 second time limit, 100 questions, no time limit for each question</string>
+
+    <!-- ACHIEVEMENTS -->
+    <!-- General Knowledge -->
+    <string name="achievement_easy_general_knowledge">Know-It-All Novice</string>
+    <string name="achievement_easy_general_knowledge_desc">Achieve a perfect score in a General Knowledge trivia on Easy difficulty</string>
+    <string name="achievement_medium_general_knowledge">Savvy Scholar</string>
+    <string name="achievement_medium_general_knowledge_desc">Achieve a perfect score in a General Knowledge trivia on Medium difficulty</string>
+    <string name="achievement_hard_general_knowledge">Renaissance Master</string>
+    <string name="achievement_hard_general_knowledge_desc">Achieve a perfect score in a General Knowledge trivia on Hard difficulty</string>
+
+    <!-- Books -->
+    <string name="achievement_easy_books">Bookworm Beginner</string>
+    <string name="achievement_easy_books_desc">Achieve a perfect score in a Books trivia on Easy difficulty</string>
+    <string name="achievement_medium_books">Literary Explorer</string>
+    <string name="achievement_medium_books_desc">Achieve a perfect score in a Books trivia on Medium difficulty</string>
+    <string name="achievement_hard_books">Master Librarian</string>
+    <string name="achievement_hard_books_desc">Achieve a perfect score in a Books trivia on Hard difficulty</string>
+
+    <!-- Film -->
+    <string name="achievement_easy_film">Movie Buff Rookie</string>
+    <string name="achievement_easy_film_desc">Achieve a perfect score in a Film trivia on Easy difficulty</string>
+    <string name="achievement_medium_film">Silver Screen Enthusiast</string>
+    <string name="achievement_medium_film_desc">Achieve a perfect score in a Film trivia on Medium difficulty</string>
+    <string name="achievement_hard_film">Cinema Connoisseur</string>
+    <string name="achievement_hard_film_desc">Achieve a perfect score in a Film trivia on Hard difficulty</string>
+
+    <!-- Music -->
+    <string name="achievement_easy_music">Rhythm Rookie</string>
+    <string name="achievement_easy_music_desc">Achieve a perfect score in a Music trivia on Easy difficulty</string>
+    <string name="achievement_medium_music">Melody Master</string>
+    <string name="achievement_medium_music_desc">Achieve a perfect score in a Music trivia on Medium difficulty</string>
+    <string name="achievement_hard_music">Harmony Hero</string>
+    <string name="achievement_hard_music_desc">Achieve a perfect score in a Music trivia on Hard difficulty</string>
+
+    <!-- Musicals & Theatres -->
+    <string name="achievement_easy_musicals_theatres">Stage Door Student</string>
+    <string name="achievement_easy_musicals_theatres_desc">Achieve a perfect score in a Musicals &amp; Theatres trivia on Easy difficulty</string>
+    <string name="achievement_medium_musicals_theatres">Broadway Enthusiast</string>
+    <string name="achievement_medium_musicals_theatres_desc">Achieve a perfect score in a Musicals &amp; Theatres trivia on Medium difficulty</string>
+    <string name="achievement_hard_musicals_theatres">Theatre Virtuoso</string>
+    <string name="achievement_hard_musicals_theatres_desc">Achieve a perfect score in a Musicals &amp; Theatres trivia on Hard difficulty</string>
+
+    <!-- Television -->
+    <string name="achievement_easy_television">Channel Surfer</string>
+    <string name="achievement_easy_television_desc">Achieve a perfect score in a Television trivia on Easy difficulty</string>
+    <string name="achievement_medium_television">Prime Time Player</string>
+    <string name="achievement_medium_television_desc">Achieve a perfect score in a Television trivia on Medium difficulty</string>
+    <string name="achievement_hard_television">TV Titan</string>
+    <string name="achievement_hard_television_desc">Achieve a perfect score in a Television trivia on Hard difficulty</string>
+
+    <!-- Video Games -->
+    <string name="achievement_easy_video_games">Player One Ready</string>
+    <string name="achievement_easy_video_games_desc">Achieve a perfect score in a Video Games trivia on Easy difficulty</string>
+    <string name="achievement_medium_video_games">Elite Gamer</string>
+    <string name="achievement_medium_video_games_desc">Achieve a perfect score in a Video Games trivia on Medium difficulty</string>
+    <string name="achievement_hard_video_games">Legendary Player</string>
+    <string name="achievement_hard_video_games_desc">Achieve a perfect score in a Video Games trivia on Hard difficulty</string>
+
+    <!-- Board Games -->
+    <string name="achievement_easy_board_games">Casual Gamer</string>
+    <string name="achievement_easy_board_games_desc">Achieve a perfect score in a Board Games trivia on Easy difficulty</string>
+    <string name="achievement_medium_board_games">Strategy Specialist</string>
+    <string name="achievement_medium_board_games_desc">Achieve a perfect score in a Board Games trivia on Medium difficulty</string>
+    <string name="achievement_hard_board_games">Grandmaster</string>
+    <string name="achievement_hard_board_games_desc">Achieve a perfect score in a Board Games trivia on Hard difficulty</string>
+
+    <!-- Science & Nature -->
+    <string name="achievement_easy_science_nature">Curious Explorer</string>
+    <string name="achievement_easy_science_nature_desc">Achieve a perfect score in a Science &amp; Nature trivia on Easy difficulty</string>
+    <string name="achievement_medium_science_nature">Natural Philosopher</string>
+    <string name="achievement_medium_science_nature_desc">Achieve a perfect score in a Science &amp; Nature trivia on Medium difficulty</string>
+    <string name="achievement_hard_science_nature">Science Sage</string>
+    <string name="achievement_hard_science_nature_desc">Achieve a perfect score in a Science &amp; Nature trivia on Hard difficulty</string>
+
+    <!-- Computers -->
+    <string name="achievement_easy_computers">Debug Beginner</string>
+    <string name="achievement_easy_computers_desc">Achieve a perfect score in a Computers trivia on Easy difficulty</string>
+    <string name="achievement_medium_computers">Code Warrior</string>
+    <string name="achievement_medium_computers_desc">Achieve a perfect score in a Computers trivia on Medium difficulty</string>
+    <string name="achievement_hard_computers">Tech Titan</string>
+    <string name="achievement_hard_computers_desc">Achieve a perfect score in a Computers trivia on Hard difficulty</string>
+
+    <!-- Mathematics -->
+    <string name="achievement_easy_mathematics">Number Novice</string>
+    <string name="achievement_easy_mathematics_desc">Achieve a perfect score in a Mathematics trivia on Easy difficulty</string>
+    <string name="achievement_medium_mathematics">Formula Master</string>
+    <string name="achievement_medium_mathematics_desc">Achieve a perfect score in a Mathematics trivia on Medium difficulty</string>
+    <string name="achievement_hard_mathematics">Mathematical Genius</string>
+    <string name="achievement_hard_mathematics_desc">Achieve a perfect score in a Mathematics trivia on Hard difficulty</string>
+
+    <!-- Mythology -->
+    <string name="achievement_easy_mythology">Myth Seeker</string>
+    <string name="achievement_easy_mythology_desc">Achieve a perfect score in a Mythology trivia on Easy difficulty</string>
+    <string name="achievement_medium_mythology">Legend Hunter</string>
+    <string name="achievement_medium_mythology_desc">Achieve a perfect score in a Mythology trivia on Medium difficulty</string>
+    <string name="achievement_hard_mythology">Mythology Sage</string>
+    <string name="achievement_hard_mythology_desc">Achieve a perfect score in a Mythology trivia on Hard difficulty</string>
+
+    <!-- Sports -->
+    <string name="achievement_easy_sports">Rookie Player</string>
+    <string name="achievement_easy_sports_desc">Achieve a perfect score in a Sports trivia on Easy difficulty</string>
+    <string name="achievement_medium_sports">All-Star Athlete</string>
+    <string name="achievement_medium_sports_desc">Achieve a perfect score in a Sports trivia on Medium difficulty</string>
+    <string name="achievement_hard_sports">Sports Legend</string>
+    <string name="achievement_hard_sports_desc">Achieve a perfect score in a Sports trivia on Hard difficulty</string>
+
+    <!-- Geography -->
+    <string name="achievement_easy_geography">Globe Trotter</string>
+    <string name="achievement_easy_geography_desc">Achieve a perfect score in a Geography trivia on Easy difficulty</string>
+    <string name="achievement_medium_geography">World Explorer</string>
+    <string name="achievement_medium_geography_desc">Achieve a perfect score in a Geography trivia on Medium difficulty</string>
+    <string name="achievement_hard_geography">Atlas Master</string>
+    <string name="achievement_hard_geography_desc">Achieve a perfect score in a Geography trivia on Hard difficulty</string>
+
+    <!-- History -->
+    <string name="achievement_easy_history">Time Traveler Trainee</string>
+    <string name="achievement_easy_history_desc">Achieve a perfect score in a History trivia on Easy difficulty</string>
+    <string name="achievement_medium_history">Chronicle Keeper</string>
+    <string name="achievement_medium_history_desc">Achieve a perfect score in a History trivia on Medium difficulty</string>
+    <string name="achievement_hard_history">History Scholar</string>
+    <string name="achievement_hard_history_desc">Achieve a perfect score in a History trivia on Hard difficulty</string>
+
+    <!-- Politics -->
+    <string name="achievement_easy_politics">Civic Student</string>
+    <string name="achievement_easy_politics_desc">Achieve a perfect score in a Politics trivia on Easy difficulty</string>
+    <string name="achievement_medium_politics">Policy Pundit</string>
+    <string name="achievement_medium_politics_desc">Achieve a perfect score in a Politics trivia on Medium difficulty</string>
+    <string name="achievement_hard_politics">Political Sage</string>
+    <string name="achievement_hard_politics_desc">Achieve a perfect score in a Politics trivia on Hard difficulty</string>
+
+    <!-- Art -->
+    <string name="achievement_easy_art">Aspiring Artist</string>
+    <string name="achievement_easy_art_desc">Achieve a perfect score in an Art trivia on Easy difficulty</string>
+    <string name="achievement_medium_art">Gallery Guide</string>
+    <string name="achievement_medium_art_desc">Achieve a perfect score in an Art trivia on Medium difficulty</string>
+    <string name="achievement_hard_art">Art Connoisseur</string>
+    <string name="achievement_hard_art_desc">Achieve a perfect score in an Art trivia on Hard difficulty</string>
+
+    <!-- Celebrities -->
+    <string name="achievement_easy_celebrities">Fan Favorite</string>
+    <string name="achievement_easy_celebrities_desc">Achieve a perfect score in a Celebrities trivia on Easy difficulty</string>
+    <string name="achievement_medium_celebrities">Star Tracker</string>
+    <string name="achievement_medium_celebrities_desc">Achieve a perfect score in a Celebrities trivia on Medium difficulty</string>
+    <string name="achievement_hard_celebrities">Celebrity Expert</string>
+    <string name="achievement_hard_celebrities_desc">Achieve a perfect score in a Celebrities trivia on Hard difficulty</string>
+
+    <!-- Animals -->
+    <string name="achievement_easy_animals">Animal Friend</string>
+    <string name="achievement_easy_animals_desc">Achieve a perfect score in an Animals trivia on Easy difficulty</string>
+    <string name="achievement_medium_animals">Wildlife Ranger</string>
+    <string name="achievement_medium_animals_desc">Achieve a perfect score in an Animals trivia on Medium difficulty</string>
+    <string name="achievement_hard_animals">Zoology Expert</string>
+    <string name="achievement_hard_animals_desc">Achieve a perfect score in an Animals trivia on Hard difficulty</string>
+
+    <!-- Vehicles -->
+    <string name="achievement_easy_vehicles">Student Driver</string>
+    <string name="achievement_easy_vehicles_desc">Achieve a perfect score in a Vehicles trivia on Easy difficulty</string>
+    <string name="achievement_medium_vehicles">Gear Head</string>
+    <string name="achievement_medium_vehicles_desc">Achieve a perfect score in a Vehicles trivia on Medium difficulty</string>
+    <string name="achievement_hard_vehicles">Motor Master</string>
+    <string name="achievement_hard_vehicles_desc">Achieve a perfect score in a Vehicles trivia on Hard difficulty</string>
+
+    <!-- Comics -->
+    <string name="achievement_easy_comics">Comic Rookie</string>
+    <string name="achievement_easy_comics_desc">Achieve a perfect score in a Comics trivia on Easy difficulty</string>
+    <string name="achievement_medium_comics">Panel Pro</string>
+    <string name="achievement_medium_comics_desc">Achieve a perfect score in a Comics trivia on Medium difficulty</string>
+    <string name="achievement_hard_comics">Comics Legend</string>
+    <string name="achievement_hard_comics_desc">Achieve a perfect score in a Comics trivia on Hard difficulty</string>
+
+    <!-- Gadgets -->
+    <string name="achievement_easy_gadgets">Tech Trainee</string>
+    <string name="achievement_easy_gadgets_desc">Achieve a perfect score in a Gadgets trivia on Easy difficulty</string>
+    <string name="achievement_medium_gadgets">Device Guru</string>
+    <string name="achievement_medium_gadgets_desc">Achieve a perfect score in a Gadgets trivia on Medium difficulty</string>
+    <string name="achievement_hard_gadgets">Gadget Genius</string>
+    <string name="achievement_hard_gadgets_desc">Achieve a perfect score in a Gadgets trivia on Hard difficulty</string>
+
+    <!-- Japanese Anime & Manga -->
+    <string name="achievement_easy_anime_manga">Anime Apprentice</string>
+    <string name="achievement_easy_anime_manga_desc">Achieve a perfect score in a Japanese Anime &amp; Manga trivia on Easy difficulty</string>
+    <string name="achievement_medium_anime_manga">Manga Master</string>
+    <string name="achievement_medium_anime_manga_desc">Achieve a perfect score in a Japanese Anime &amp; Manga trivia on Medium difficulty</string>
+    <string name="achievement_hard_anime_manga">Otaku Oracle</string>
+    <string name="achievement_hard_anime_manga_desc">Achieve a perfect score in a Japanese Anime &amp; Manga trivia on Hard difficulty</string>
+
+    <!-- Cartoon & Animations -->
+    <string name="achievement_easy_cartoons">Toon Trainee</string>
+    <string name="achievement_easy_cartoons_desc">Achieve a perfect score in a Cartoon &amp; Animations trivia on Easy difficulty</string>
+    <string name="achievement_medium_cartoons">Animation Ace</string>
+    <string name="achievement_medium_cartoons_desc">Achieve a perfect score in a Cartoon &amp; Animations trivia on Medium difficulty</string>
+    <string name="achievement_hard_cartoons">Cartoon Champion</string>
+    <string name="achievement_hard_cartoons_desc">Achieve a perfect score in a Cartoon &amp; Animations trivia on Hard difficulty</string>
 </resources>

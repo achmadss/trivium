@@ -16,6 +16,8 @@ import dev.achmad.trivium.ui.screens.achievement.AchievementRoute
 import dev.achmad.trivium.ui.screens.achievement.achievement
 import dev.achmad.trivium.ui.screens.category.CategoryRoute
 import dev.achmad.trivium.ui.screens.category.category
+import dev.achmad.trivium.ui.screens.game.GameRoute
+import dev.achmad.trivium.ui.screens.game.game
 import dev.achmad.trivium.ui.screens.main_menu.MainMenuRoute
 import dev.achmad.trivium.ui.screens.main_menu.mainMenu
 import dev.achmad.trivium.ui.screens.new_game.NewGameRoute
@@ -74,8 +76,23 @@ class MainActivity : ComponentActivity() {
                         onNavigateToCategory = {
                             navController.navigate(CategoryRoute)
                         },
-                        onNavigateToGame = {
-                            // TODO navigate to game screen
+                        onNavigateToGame = { mode, difficulty, category, type ->
+                            navController.navigate(
+                                GameRoute(
+                                    mode = mode,
+                                    difficulty = difficulty,
+                                    category = category,
+                                    type = type
+                                )
+                            )
+                        }
+                    )
+                    game(
+                        onQuit = {
+                            navController.navigateUp()
+                        },
+                        onFinish = {
+                            // TODO navigate to end screen with data from viewmodel
                         }
                     )
                 }

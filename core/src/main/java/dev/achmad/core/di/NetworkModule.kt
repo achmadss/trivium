@@ -8,8 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.achmad.core.HILT_RETROFIT_TRIVIUM
-import dev.achmad.core.HILT_RETROFIT_OPEN_TRIVIA_DATABASE
 import dev.achmad.core.API_HOST_TRIVIUM
 import dev.achmad.core.API_HOST_OPEN_TRIVIA_DATABASE
 import dev.achmad.core.preference.PreferenceStore

@@ -25,6 +25,7 @@ val secondaryDark = Color(0xFFCCD2D8)   // Lower emphasis text
 val accent = Color(0xFFA363FF)          // Orange accent for important elements
 val accentLight = Color(0xFFBE8AFF)     // Lighter version for hover states
 val accentDark = Color(0xFF7E48DB)      // Darker version for pressed states
+val accentAlt = Color(0xFFCDAA5C)
 
 // Disabled States
 val disabled = Color(0xFF9AA0A6)        // Disabled button/element background
