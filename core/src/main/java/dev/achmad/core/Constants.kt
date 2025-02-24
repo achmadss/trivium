@@ -1,14 +1,11 @@
 package dev.achmad.core
 
-// Hilt Named
-const val HILT_RETROFIT_TRIVIUM = "HILT_RETROFIT_TRIVIUM"
-const val HILT_RETROFIT_OPEN_TRIVIA_DATABASE = "HILT_RETROFIT_OPEN_TRIVIA_DATABASE"
-
 // Shared Preferences
 const val SHARED_PREFERENCES_NAME = "trivium"
 const val TRIVIUM_PREF = "trivium_pref_"
 const val OPEN_TRIVIA_DATABASE_PREF = "opentdb_pref_"
 const val NETWORK_PREF = "network_pref_"
+const val TRIVIUM_ACHIEVEMENT_PREF = "trivium_achievement_pref_"
 
 // Hosts
 const val API_HOST_TRIVIUM = "api-trivium.achmad.dev"
@@ -25,3 +22,8 @@ const val TRIVIUM_ACTION = "TRIVIUM_ACTION"
 
 // Messages
 const val unknownError = "Unknown Error"
+
+// OpenTDB Error Codes
+const val OPEN_TRIVIA_DATABASE_TOKEN_EXPIRED = 3
+const val OPEN_TRIVIA_DATABASE_TOKEN_EXHAUSTED = 4
+const val OPEN_TRIVIA_DATABASE_RATE_LIMITED = 5

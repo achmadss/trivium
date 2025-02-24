@@ -47,6 +47,9 @@ dependencies {
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
 
+    // kotlinx serialization json
+    implementation(libs.kotlinx.serialization.json)
+
     // retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)

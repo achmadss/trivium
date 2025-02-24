@@ -7,8 +7,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.achmad.core.API_HOST_OPEN_TRIVIA_DATABASE
 import dev.achmad.core.API_HOST_TRIVIUM
-import dev.achmad.core.HILT_RETROFIT_OPEN_TRIVIA_DATABASE
-import dev.achmad.core.HILT_RETROFIT_TRIVIUM
 import dev.achmad.core.preference.PreferenceStore
 import dev.achmad.data.api.opentdb.preference.OpenTriviaDatabasePreference
 import dev.achmad.data.api.opentdb.repository.OpenTriviaDatabaseRepository
@@ -25,19 +23,6 @@ object OpenTriviaDatabaseModule {
 
     @Provides
     @Singleton
-    @Named(HILT_RETROFIT_OPEN_TRIVIA_DATABASE)
-    fun provideOpenTriviaDatabaseRetrofit(
-        okHttpClient: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://$API_HOST_OPEN_TRIVIA_DATABASE/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .build()
-    }
-
-    @Provides
-    @Singleton
     fun provideOpenTriviaDatabaseRepository(
         service: OpenTriviaDatabaseService,
         openTriviaDatabasePreference: OpenTriviaDatabasePreference,
@@ -46,8 +31,15 @@ object OpenTriviaDatabaseModule {
     @Provides
     @Singleton
     fun provideOpenTriviaDatabaseService(
-        @Named(HILT_RETROFIT_OPEN_TRIVIA_DATABASE) retrofit: Retrofit
-    ) = retrofit.create(OpenTriviaDatabaseService::class.java)
+        okHttpClient: OkHttpClient
+    ): OpenTriviaDatabaseService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://$API_HOST_OPEN_TRIVIA_DATABASE/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .build()
+        return retrofit.create(OpenTriviaDatabaseService::class.java)
+    }
 
     @Provides
     @Singleton

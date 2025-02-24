@@ -1,5 +1,6 @@
 package dev.achmad.trivium.ui.screens.new_game
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,12 +44,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import dev.achmad.core.model.category.TriviaCategory
 import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.core.model.mode.TriviaMode
+import dev.achmad.core.model.type.TriviaType
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
 import dev.achmad.trivium.ui.components.TriviumTopBar
+import dev.achmad.trivium.ui.theme.accent
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
 import dev.achmad.trivium.ui.theme.disabled
@@ -64,7 +68,7 @@ object NewGameRoute
 fun NavGraphBuilder.newGame(
     onBack: () -> Unit,
     onNavigateToCategory: () -> Unit,
-    onNavigateToGame: () -> Unit,
+    onNavigateToGame: (TriviaMode, TriviaDifficulty, TriviaCategory, TriviaType) -> Unit,
 ) {
     composable<NewGameRoute> {
         val viewModel: NewGameScreenViewModel = activityViewModel()
@@ -79,7 +83,14 @@ fun NavGraphBuilder.newGame(
             onSelectMode = { mode ->
                 viewModel.selectMode(mode)
             },
-            onStartGame = onNavigateToGame
+            onStartGame = {
+                onNavigateToGame(
+                    state.mode,
+                    state.difficulty,
+                    state.category,
+                    state.type
+                )
+            }
         )
     }
 }
@@ -126,15 +137,15 @@ fun NewGameScreen(
                 ,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                IconLabel(
+                TriviumNewGameIconLabel(
                     text = "Category",
                     icon = ImageVector.vectorResource(R.drawable.bookmark)
                 )
-                TrailingFilledButton(
+                TriviumNewGameTrailingFilledButton(
                     text = state.category.displayName,
                     onClick = onNavigateToCategory
                 )
-                IconLabel(
+                TriviumNewGameIconLabel(
                     text = "Difficulty",
                     icon = ImageVector.vectorResource(R.drawable.bolt)
                 )
@@ -144,13 +155,13 @@ fun NewGameScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     TriviaDifficulty.entries.forEach { difficulty ->
-                        DifficultyButton(
+                        TriviumNewGameDifficultyButton(
                             modifier = Modifier
                                 .weight(0.33f),
                             difficulty = difficulty,
                             state = when {
-                                state.difficulty != difficulty -> TriviumDifficultyButtonState.INACTIVE
-                                else -> TriviumDifficultyButtonState.ACTIVE
+                                state.difficulty != difficulty -> TriviumNewGameDifficultyButtonState.INACTIVE
+                                else -> TriviumNewGameDifficultyButtonState.ACTIVE
                             },
                             onClick = {
                                 onSelectDifficulty(difficulty)
@@ -159,7 +170,7 @@ fun NewGameScreen(
                         )
                     }
                 }
-                IconLabel(
+                TriviumNewGameIconLabel(
                     text = "Mode",
                     icon = Icons.Outlined.Settings
                 )
@@ -214,6 +225,8 @@ fun NewGameScreen(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Start Game",
                     icon = Icons.Outlined.PlayArrow,
+                    state = TriviumFilledButtonState.INACTIVE,
+                    border = BorderStroke(1.dp, accent),
                     contentPadding = PaddingValues(16.dp),
                     onClick = onStartGame,
                 )
@@ -235,7 +248,7 @@ fun NewGameScreen(
 }
 
 @Composable
-private fun IconLabel(
+private fun TriviumNewGameIconLabel(
     text: String,
     icon: ImageVector,
 ) {
@@ -259,7 +272,7 @@ private fun IconLabel(
 }
 
 @Composable
-private fun TrailingFilledButton(
+private fun TriviumNewGameTrailingFilledButton(
     text: String,
     onClick: () -> Unit,
 ) {
@@ -292,33 +305,33 @@ private fun TrailingFilledButton(
     }
 }
 
-enum class TriviumDifficultyButtonState {
+enum class TriviumNewGameDifficultyButtonState {
     ACTIVE, INACTIVE
 }
 
-private data class TriviumFilledButtonColors(
+private data class TriviumNewGameDifficultyButtonColors(
     val backgroundColor: Color = background80,
     val buttonTextColor: Color = secondary,
     val iconColor: Color = primaryDark,
 )
 
 @Composable
-private fun DifficultyButton(
+private fun TriviumNewGameDifficultyButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     difficulty: TriviaDifficulty,
-    state: TriviumDifficultyButtonState = TriviumDifficultyButtonState.INACTIVE
+    state: TriviumNewGameDifficultyButtonState = TriviumNewGameDifficultyButtonState.INACTIVE
 ) {
     val colors = when(state) {
-        TriviumDifficultyButtonState.ACTIVE -> {
-            TriviumFilledButtonColors(
+        TriviumNewGameDifficultyButtonState.ACTIVE -> {
+            TriviumNewGameDifficultyButtonColors(
                 backgroundColor = primaryDark,
                 buttonTextColor = secondary,
                 iconColor = secondary,
             )
         }
-        TriviumDifficultyButtonState.INACTIVE -> {
-            TriviumFilledButtonColors(
+        TriviumNewGameDifficultyButtonState.INACTIVE -> {
+            TriviumNewGameDifficultyButtonColors(
                 backgroundColor = background80,
                 buttonTextColor = disabledText,
                 iconColor = disabled,

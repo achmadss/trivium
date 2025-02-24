@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface OpenTriviaDatabaseService {
 
     @GET(OPEN_TRIVIA_DATABASE_API_PREFIX)
-    fun getTrivia(
+    suspend fun getTrivia(
         @Query("amount") amount: Int,
         @Query("category") category: Int,
         @Query("difficulty") difficulty: String,
@@ -21,12 +21,12 @@ interface OpenTriviaDatabaseService {
     ): Response<GetTriviaResponse>
 
     @GET(OPEN_TRIVIA_DATABASE_API_TOKEN_PREFIX)
-    fun getSessionToken(
+    suspend fun getSessionToken(
         @Query("command") command: String = "request",
     ): Response<RequestSessionTokenResponse>
 
     @GET(OPEN_TRIVIA_DATABASE_API_TOKEN_PREFIX)
-    fun resetSessionToken(
+    suspend fun resetSessionToken(
         @Query("token") token: String,
         @Query("command") command: String = "reset",
     ): Response<ResetSessionTokenResponse>
