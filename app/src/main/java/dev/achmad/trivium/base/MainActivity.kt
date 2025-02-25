@@ -16,6 +16,8 @@ import dev.achmad.trivium.ui.screens.achievement.AchievementRoute
 import dev.achmad.trivium.ui.screens.achievement.achievement
 import dev.achmad.trivium.ui.screens.category.CategoryRoute
 import dev.achmad.trivium.ui.screens.category.category
+import dev.achmad.trivium.ui.screens.end.EndRoute
+import dev.achmad.trivium.ui.screens.end.end
 import dev.achmad.trivium.ui.screens.game.GameRoute
 import dev.achmad.trivium.ui.screens.game.game
 import dev.achmad.trivium.ui.screens.main_menu.MainMenuRoute
@@ -91,8 +93,24 @@ class MainActivity : ComponentActivity() {
                         onQuit = {
                             navController.navigateUp()
                         },
-                        onFinish = {
-                            // TODO navigate to end screen with data from viewmodel
+                        onNavigateToEnd = { score, correctAnswerCount, questionCount, highestStreak, timeElapsed ->
+                            navController.navigate(
+                                EndRoute(
+                                    score = score,
+                                    correctAnswerCount = correctAnswerCount,
+                                    questionCount = questionCount,
+                                    highestStreak = highestStreak,
+                                    timeElapsed = timeElapsed
+                                )
+                            )
+                        }
+                    )
+                    end(
+                        onPlayAgain = {
+                            navController.navigate(NewGameRoute)
+                        },
+                        onNavigateToMainMenu = {
+                            navController.navigate(MainMenuRoute)
                         }
                     )
                 }

@@ -23,10 +23,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.disabled
-import dev.achmad.trivium.ui.theme.disabledText
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumDisabled
+import dev.achmad.trivium.ui.theme.triviumDisabledText
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
 
 enum class TriviumFilledButtonState {
     ACTIVE, INACTIVE
@@ -40,12 +40,12 @@ fun TriviumFilledButton(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(8.dp),
     state: TriviumFilledButtonState = TriviumFilledButtonState.ACTIVE,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
 ) {
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = when(state) {
-            TriviumFilledButtonState.ACTIVE -> primaryDark
+            TriviumFilledButtonState.ACTIVE -> triviumPrimaryDark
             TriviumFilledButtonState.INACTIVE -> background80
         },
         border = border,
@@ -65,8 +65,8 @@ fun TriviumFilledButton(
                         imageVector = icon,
                         contentDescription = null,
                         tint = when(state) {
-                            TriviumFilledButtonState.ACTIVE -> secondary
-                            TriviumFilledButtonState.INACTIVE -> disabled
+                            TriviumFilledButtonState.ACTIVE -> triviumSecondary
+                            TriviumFilledButtonState.INACTIVE -> triviumDisabled
                         }
                     )
                     Spacer(Modifier.width(8.dp))
@@ -75,8 +75,8 @@ fun TriviumFilledButton(
                     Text(
                         text = text,
                         color = when(state) {
-                            TriviumFilledButtonState.ACTIVE -> secondary
-                            TriviumFilledButtonState.INACTIVE -> disabledText
+                            TriviumFilledButtonState.ACTIVE -> triviumSecondary
+                            TriviumFilledButtonState.INACTIVE -> triviumDisabledText
                         },
                         style = MaterialTheme.typography.labelLarge
                     )

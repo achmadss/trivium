@@ -58,7 +58,6 @@ fun AchievementScreen(
                 TriviumAchievementListItem(
                     title = stringResource(R.string.achievement_example, "$count"),
                     subtitle = "Example Text",
-                    icon = ImageVector.vectorResource(R.drawable.trophy)
                 )
             }
         }

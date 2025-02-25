@@ -1,5 +1,6 @@
 package dev.achmad.trivium.ui.screens.new_game
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.PlayArrow
@@ -52,13 +55,13 @@ import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
 import dev.achmad.trivium.ui.components.TriviumTopBar
-import dev.achmad.trivium.ui.theme.accent
+import dev.achmad.trivium.ui.theme.triviumAccent
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.disabled
-import dev.achmad.trivium.ui.theme.disabledText
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumDisabled
+import dev.achmad.trivium.ui.theme.triviumDisabledText
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 
@@ -127,7 +130,11 @@ fun NewGameScreen(
         }
     ) { contentPadding ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(
+                    state = rememberScrollState()
+                )
         ) {
             Column(
                 modifier = Modifier
@@ -217,7 +224,7 @@ fun NewGameScreen(
                                 TriviaMode.TIME_ATTACK -> dev.achmad.core.R.string.new_game_time_attack_description
                             }
                         ),
-                        color = disabledText,
+                        color = triviumDisabledText,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -226,7 +233,7 @@ fun NewGameScreen(
                     text = "Start Game",
                     icon = Icons.Outlined.PlayArrow,
                     state = TriviumFilledButtonState.INACTIVE,
-                    border = BorderStroke(1.dp, accent),
+                    border = BorderStroke(1.dp, triviumAccent),
                     contentPadding = PaddingValues(16.dp),
                     onClick = onStartGame,
                 )
@@ -239,7 +246,7 @@ fun NewGameScreen(
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center),
-                        color = primaryDark
+                        color = triviumPrimaryDark
                     )
                 }
             }
@@ -260,12 +267,12 @@ private fun TriviumNewGameIconLabel(
             modifier = Modifier.size(24.dp),
             imageVector = icon,
             contentDescription = null,
-            tint = primaryDark
+            tint = triviumPrimaryDark
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            color = secondary,
+            color = triviumSecondary,
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -293,13 +300,13 @@ private fun TriviumNewGameTrailingFilledButton(
         ) {
             Text(
                 text = text,
-                color = disabledText,
+                color = triviumDisabledText,
                 style = MaterialTheme.typography.labelLarge,
             )
             Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = null,
-                tint = disabled
+                tint = triviumDisabled
             )
         }
     }
@@ -311,8 +318,8 @@ enum class TriviumNewGameDifficultyButtonState {
 
 private data class TriviumNewGameDifficultyButtonColors(
     val backgroundColor: Color = background80,
-    val buttonTextColor: Color = secondary,
-    val iconColor: Color = primaryDark,
+    val buttonTextColor: Color = triviumSecondary,
+    val iconColor: Color = triviumPrimaryDark,
 )
 
 @Composable
@@ -325,16 +332,16 @@ private fun TriviumNewGameDifficultyButton(
     val colors = when(state) {
         TriviumNewGameDifficultyButtonState.ACTIVE -> {
             TriviumNewGameDifficultyButtonColors(
-                backgroundColor = primaryDark,
-                buttonTextColor = secondary,
-                iconColor = secondary,
+                backgroundColor = triviumPrimaryDark,
+                buttonTextColor = triviumSecondary,
+                iconColor = triviumSecondary,
             )
         }
         TriviumNewGameDifficultyButtonState.INACTIVE -> {
             TriviumNewGameDifficultyButtonColors(
                 backgroundColor = background80,
-                buttonTextColor = disabledText,
-                iconColor = disabled,
+                buttonTextColor = triviumDisabledText,
+                iconColor = triviumDisabled,
             )
         }
     }

@@ -24,7 +24,9 @@ data class GameState(
     val loading: Boolean = true,
     val timerRunning: Boolean = false,
     val errorMessage: String = "",
+    val correctAnswerCount: Int = 0,
     val score: Int = 0,
+    val highestStreak: Int = 0,
     val streak: Int = 0,
     val timeElapsed: Int = 0,
     val questions: List<GetTriviaResponse.Result> = emptyList(),
@@ -32,7 +34,7 @@ data class GameState(
     val selectedOption: String? = null,
     val currentQuestion: GetTriviaResponse.Result? = if (questions.isNotEmpty()) questions[currentQuestionIndex] else null,
     val currentOptions: List<String>? = currentQuestion?.options,
-    val confirmed: Boolean = false, // TODO set this to false on next question
+    val confirmed: Boolean = false,
 )
 
 @HiltViewModel
@@ -50,24 +52,23 @@ class GameScreenViewModel @Inject constructor(
     }
 
     fun onConfirm(difficulty: TriviaDifficulty) {
-        val newScore: Int
-        val newStreak: Int
-        if (state.value.selectedOption == state.value.currentQuestion?.correctAnswer) {
-            newScore = when(difficulty) {
-                TriviaDifficulty.EASY -> state.value.score + 100
-                TriviaDifficulty.NORMAL -> state.value.score + 150
-                TriviaDifficulty.HARD -> state.value.score + 200
-            }
-            newStreak = state.value.streak + 1
-        } else {
-            newStreak = 0
-            newScore = state.value.score
+        val isCorrect = state.value.selectedOption == state.value.currentQuestion?.correctAnswer
+
+        _state.update { currentState ->
+            currentState.copy(
+                confirmed = true,
+                score = if (isCorrect) {
+                    currentState.score + when(difficulty) {
+                        TriviaDifficulty.EASY -> 100
+                        TriviaDifficulty.NORMAL -> 150
+                        TriviaDifficulty.HARD -> 200
+                    }
+                } else currentState.score,
+                streak = if (isCorrect) currentState.streak + 1 else 0,
+                highestStreak = if (currentState.streak > currentState.highestStreak) currentState.streak else currentState.highestStreak,
+                correctAnswerCount = if (isCorrect) currentState.correctAnswerCount + 1 else currentState.correctAnswerCount
+            )
         }
-        _state.update { it.copy(
-            confirmed = true,
-            score = newScore,
-            streak = newStreak
-        ) }
     }
 
     private fun startTimer() {
@@ -153,7 +154,8 @@ class GameScreenViewModel @Inject constructor(
             startTimer()
             Log.e("ASD", "Game Started")
         } catch (e: Exception) {
-            _state.update { it.copy(errorMessage = e.message ?: unknownError, loading = false) }
+            _state.update {
+                it.copy(errorMessage = e.message ?: unknownError, loading = false) }
             Log.e("ASD", "${e.message}")
         }
     }

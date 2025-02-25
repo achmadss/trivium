@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.achmad.trivium.ui.theme.background100
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.utils.bottomBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,16 +28,16 @@ fun TriviumTopBar(
 ) {
     TopAppBar(
         modifier = Modifier
-            .bottomBorder(1.dp, primaryDark),
+            .bottomBorder(1.dp, triviumPrimaryDark),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = background100,
-            navigationIconContentColor = primaryDark,
-            titleContentColor = secondary,
+            navigationIconContentColor = triviumPrimaryDark,
+            titleContentColor = triviumSecondary,
         ),
         title = {
             Text(
                 text = text,
-                color = secondary,
+                color = triviumSecondary,
                 style = MaterialTheme.typography.titleMedium,
             )
         },

@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Timer
@@ -37,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,17 +51,19 @@ import dev.achmad.core.model.category.TriviaCategory
 import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.core.model.mode.TriviaMode
 import dev.achmad.core.model.type.TriviaType
+import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
-import dev.achmad.trivium.ui.theme.accent
-import dev.achmad.trivium.ui.theme.accentAlt
+import dev.achmad.trivium.ui.components.TriviumNonLazyGrid
+import dev.achmad.trivium.ui.theme.triviumAccent
+import dev.achmad.trivium.ui.theme.triviumAccentAlt
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.error
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
-import dev.achmad.trivium.ui.theme.success
-import dev.achmad.trivium.ui.theme.warning
+import dev.achmad.trivium.ui.theme.triviumError
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
+import dev.achmad.trivium.ui.theme.triviumSuccess
+import dev.achmad.trivium.ui.theme.triviumWarning
 import dev.achmad.trivium.ui.utils.activityViewModel
 import dev.achmad.trivium.ui.utils.bottomBorder
 import kotlinx.serialization.Serializable
@@ -72,7 +78,13 @@ data class GameRoute(
 
 fun NavGraphBuilder.game(
     onQuit: () -> Unit,
-    onFinish: () -> Unit
+    onNavigateToEnd: (
+        score:Int,
+        correctAnswerCount:Int,
+        questionCount:Int,
+        highestStreak:Int,
+        timeElapsed:Int
+            ) -> Unit
 ) {
     composable<GameRoute> { backStackEntry ->
         val data = backStackEntry.toRoute<GameRoute>()
@@ -98,9 +110,15 @@ fun NavGraphBuilder.game(
             onSelectOption = { option ->
                 viewModel.selectOption(option)
             },
-            onFinish = {
+            onNavigateToEnd = {
                 viewModel.stopTimer()
-                onFinish()
+                onNavigateToEnd(
+                    state.score,
+                    state.correctAnswerCount,
+                    state.questions.size,
+                    state.highestStreak,
+                    state.timeElapsed
+                )
             },
             onConfirmAnswer = {
                 viewModel.onConfirm(data.difficulty)
@@ -116,11 +134,10 @@ fun NavGraphBuilder.game(
 fun GameScreen(
     state: GameState = GameState(),
     onQuit: () -> Unit = {},
-    onExit: () -> Unit = {},
     onConfirmAnswer: () -> Unit = {},
     onNextQuestion: () -> Unit = {},
     onSelectOption: (String) -> Unit = {},
-    onFinish: () -> Unit = {}
+    onNavigateToEnd: () -> Unit = {}
 ) {
     if (state.loading) {
         Box(
@@ -129,7 +146,7 @@ fun GameScreen(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
-                color = primaryDark
+                color = triviumPrimaryDark
             )
         }
         return
@@ -147,7 +164,8 @@ fun GameScreen(
         }
     ) { contentPadding ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
@@ -160,7 +178,7 @@ fun GameScreen(
             ) {
                 Text(
                     text = "Question ${state.currentQuestionIndex + 1}",
-                    color = secondary,
+                    color = triviumSecondary,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Box(
@@ -175,55 +193,57 @@ fun GameScreen(
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = state.currentQuestion?.question ?: "",
-                        color = secondary,
+                        color = triviumSecondary,
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center
                     )
                 }
-                LazyVerticalGrid(
-                    modifier = Modifier.fillMaxWidth(),
-                    columns = GridCells.Fixed(2),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    state.currentOptions?.let {
-                        items(state.currentOptions) { item ->
-                            TriviumGameOptionButton(
-                                text = item,
-                                selected = state.selectedOption == item,
-                                state = when {
-                                    state.confirmed && item == state.selectedOption -> {
-                                        if (item == state.currentQuestion?.correctAnswer) {
-                                            TriviumGameOptionButtonState.CORRECT
-                                        } else {
-                                            TriviumGameOptionButtonState.INCORRECT
-                                        }
-                                    }
-                                    state.confirmed && item == state.currentQuestion?.correctAnswer -> {
+
+                state.currentOptions?.let {
+                    TriviumNonLazyGrid(
+                        columns = 2,
+                        itemCount = state.currentOptions.size,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) { index ->
+                        val item = state.currentOptions[index]
+                        TriviumGameOptionButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = item,
+                            selected = state.selectedOption == item,
+                            state = when {
+                                state.confirmed && item == state.selectedOption -> {
+                                    if (item == state.currentQuestion?.correctAnswer) {
                                         TriviumGameOptionButtonState.CORRECT
-                                    }
-                                    else -> TriviumGameOptionButtonState.IDLE
-                                },
-                                onClick = {
-                                    if (!state.confirmed) {
-                                        onSelectOption(item)
+                                    } else {
+                                        TriviumGameOptionButtonState.INCORRECT
                                     }
                                 }
-                            )
-                        }
+                                state.confirmed && item == state.currentQuestion?.correctAnswer -> {
+                                    TriviumGameOptionButtonState.CORRECT
+                                }
+                                else -> TriviumGameOptionButtonState.IDLE
+                            },
+                            onClick = {
+                                if (!state.confirmed) {
+                                    onSelectOption(item)
+                                }
+                            }
+                        )
                     }
                 }
+
                 if (state.confirmed && state.selectedOption != null) {
                     val nextQuestionIndex = state.currentQuestionIndex + 1
                     TriviumFilledButton(
                         modifier = Modifier.fillMaxWidth(),
                         contentPadding = PaddingValues(16.dp),
                         text = if (nextQuestionIndex == state.questions.size) "Finish" else "Next Question",
-                        border = BorderStroke(1.dp, accent),
+                        border = BorderStroke(1.dp, triviumAccent),
                         state = TriviumFilledButtonState.INACTIVE,
                         onClick = {
                             if (nextQuestionIndex == state.questions.size) {
-                                onFinish()
+                                onNavigateToEnd()
                             } else onNextQuestion()
                         }
                     )
@@ -238,7 +258,7 @@ fun GameScreen(
                 TriviumFilledButton(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(16.dp),
-                    border = BorderStroke(1.dp, error),
+                    border = BorderStroke(1.dp, triviumError),
                     state = TriviumFilledButtonState.INACTIVE,
                     text = "Give Up",
                     onClick = onQuit,
@@ -258,7 +278,7 @@ private fun TriviumGameAppBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .bottomBorder(1.dp, primaryDark)
+            .bottomBorder(1.dp, triviumPrimaryDark)
             .background(background100)
             .statusBarsPadding()
             .padding(16.dp)
@@ -271,14 +291,14 @@ private fun TriviumGameAppBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Outlined.Token,
+                imageVector = ImageVector.vectorResource(R.drawable.editor_choice),
                 contentDescription = "Score",
-                tint = accentAlt
+                tint = triviumAccentAlt
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = score.toString(),
-                color = accentAlt,
+                color = triviumAccentAlt,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -289,12 +309,12 @@ private fun TriviumGameAppBar(
             Icon(
                 imageVector = Icons.Outlined.LocalFireDepartment,
                 contentDescription = "Questions remaining",
-                tint = warning
+                tint = triviumWarning
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = streak.toString(),
-                color = warning,
+                color = triviumWarning,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -305,12 +325,12 @@ private fun TriviumGameAppBar(
             Icon(
                 imageVector = Icons.Outlined.Timer,
                 contentDescription = "Time remaining",
-                tint = primaryDark
+                tint = triviumPrimaryDark
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = timeElapsed.toString(),
-                color = primaryDark,
+                color = triviumPrimaryDark,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -332,8 +352,8 @@ private fun TriviumGameOptionButton(
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = when (state) {
-            TriviumGameOptionButtonState.CORRECT -> success
-            TriviumGameOptionButtonState.INCORRECT -> error
+            TriviumGameOptionButtonState.CORRECT -> triviumSuccess
+            TriviumGameOptionButtonState.INCORRECT -> triviumError
             else -> background80
         },
         border = BorderStroke(
@@ -342,7 +362,7 @@ private fun TriviumGameOptionButton(
                 else -> 0.dp
             },
             color = when {
-                selected -> accent
+                selected -> triviumAccent
                 else -> Color.Transparent
             },
         )
@@ -356,7 +376,7 @@ private fun TriviumGameOptionButton(
         ) {
             Text(
                 text = text,
-                color = secondary,
+                color = triviumSecondary,
                 style = MaterialTheme.typography.labelLarge
             )
         }

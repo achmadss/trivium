@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.theme.background40
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.disabledText
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumDisabledText
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.utils.transparency
 
 enum class TriviumAchievementListItemState {
@@ -39,9 +39,9 @@ enum class TriviumAchievementListItemState {
 
 private data class TriviumAchievementListItemColors(
     val backgroundColor: Color = background80,
-    val titleTextColor: Color = secondary,
-    val subtitleTextColor: Color = disabledText,
-    val iconColor: Color = primaryDark,
+    val titleTextColor: Color = triviumSecondary,
+    val subtitleTextColor: Color = triviumDisabledText,
+    val iconColor: Color = triviumPrimaryDark,
     val iconBackgroundColor: Color = background40,
 )
 
@@ -52,25 +52,25 @@ fun TriviumAchievementListItem(
     modifier: Modifier = Modifier,
     title: String,
     subtitle: String,
-    icon: ImageVector,
+    icon: ImageVector = ImageVector.vectorResource(R.drawable.trophy),
     state: TriviumAchievementListItemState = TriviumAchievementListItemState.INACTIVE,
 ) {
     val colors = when(state) {
         TriviumAchievementListItemState.ACTIVE -> {
             TriviumAchievementListItemColors(
                 backgroundColor = background80,
-                titleTextColor = secondary,
-                subtitleTextColor = disabledText,
-                iconColor = primaryDark,
+                titleTextColor = triviumSecondary,
+                subtitleTextColor = triviumDisabledText,
+                iconColor = triviumPrimaryDark,
                 iconBackgroundColor = background40,
             )
         }
         TriviumAchievementListItemState.INACTIVE -> {
             TriviumAchievementListItemColors(
                 backgroundColor = background80.transparency(),
-                titleTextColor = secondary.transparency(),
-                subtitleTextColor = disabledText.transparency(),
-                iconColor = primaryDark.transparency(),
+                titleTextColor = triviumSecondary.transparency(),
+                subtitleTextColor = triviumDisabledText.transparency(),
+                iconColor = triviumPrimaryDark.transparency(),
                 iconBackgroundColor = background40.transparency(),
             )
         }

@@ -34,10 +34,10 @@ import androidx.navigation.compose.composable
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
-import dev.achmad.trivium.ui.theme.accent
+import dev.achmad.trivium.ui.theme.triviumAccent
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumSecondary
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -87,7 +87,7 @@ fun MainMenuScreen(
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.trophy),
                     contentDescription = null,
-                    tint = secondary
+                    tint = triviumSecondary
                 )
             }
         }
@@ -104,7 +104,7 @@ fun MainMenuScreen(
                     horizontal = 16.dp,
                     vertical = 8.dp,
                 ),
-                border = BorderStroke(1.dp, accent),
+                border = BorderStroke(1.dp, triviumAccent),
                 state = TriviumFilledButtonState.INACTIVE,
                 icon = Icons.Outlined.PlayArrow,
                 text = stringResource(R.string.main_menu_play),

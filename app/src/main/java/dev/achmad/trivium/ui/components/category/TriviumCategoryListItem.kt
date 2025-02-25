@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.theme.background40
 import dev.achmad.trivium.ui.theme.background80
-import dev.achmad.trivium.ui.theme.disabledText
-import dev.achmad.trivium.ui.theme.primary
-import dev.achmad.trivium.ui.theme.primaryDark
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumDisabledText
+import dev.achmad.trivium.ui.theme.triviumPrimary
+import dev.achmad.trivium.ui.theme.triviumPrimaryDark
+import dev.achmad.trivium.ui.theme.triviumSecondary
 
 enum class TriviumCategoryListItemState {
     ACTIVE, INACTIVE
@@ -38,8 +38,8 @@ enum class TriviumCategoryListItemState {
 
 private data class TriviumAchievementListItemColors(
     val backgroundColor: Color = background80,
-    val titleTextColor: Color = secondary,
-    val iconColor: Color = primaryDark,
+    val titleTextColor: Color = triviumSecondary,
+    val iconColor: Color = triviumPrimaryDark,
     val iconBackgroundColor: Color = background40,
 )
 
@@ -54,17 +54,17 @@ fun TriviumCategoryListItem(
     val colors = when(state) {
         TriviumCategoryListItemState.ACTIVE -> {
             TriviumAchievementListItemColors(
-                backgroundColor = primaryDark,
-                titleTextColor = secondary,
-                iconColor = secondary,
-                iconBackgroundColor = primary,
+                backgroundColor = triviumPrimaryDark,
+                titleTextColor = triviumSecondary,
+                iconColor = triviumSecondary,
+                iconBackgroundColor = triviumPrimary,
             )
         }
         TriviumCategoryListItemState.INACTIVE -> {
             TriviumAchievementListItemColors(
                 backgroundColor = background80,
-                titleTextColor = disabledText,
-                iconColor = primaryDark,
+                titleTextColor = triviumDisabledText,
+                iconColor = triviumPrimaryDark,
                 iconBackgroundColor = background40,
             )
         }

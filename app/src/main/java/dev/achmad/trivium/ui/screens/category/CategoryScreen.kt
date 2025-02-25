@@ -28,7 +28,7 @@ import dev.achmad.trivium.ui.components.category.TriviumCategoryListItemState
 import dev.achmad.trivium.ui.screens.new_game.NewGameScreenViewModel
 import dev.achmad.trivium.ui.screens.new_game.NewGameState
 import dev.achmad.trivium.ui.theme.background100
-import dev.achmad.trivium.ui.theme.secondary
+import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 
@@ -73,7 +73,7 @@ fun CategoryScreen(
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = null,
-                            tint = secondary
+                            tint = triviumSecondary
                         )
                     }
                 }
