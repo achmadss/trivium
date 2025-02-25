@@ -97,6 +97,7 @@ class GameScreenViewModel @Inject constructor(
             currentQuestion = nextQuestion,
             currentQuestionIndex = nextQuestionIndex,
             currentOptions = nextOptions,
+            selectedOption = null,
             confirmed = false
         ) }
     }

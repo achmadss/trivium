@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -116,11 +117,11 @@ val dummyUnlockedAchievements = listOf(
 fun EndScreen(
     onPlayAgain: () -> Unit = {},
     onNavigateToMainMenu: () -> Unit = {},
-    score: Int,
-    correctAnswerCount: Int,
-    questionCount: Int,
-    highestStreak: Int,
-    timeElapsed: Int
+    score: Int = 0,
+    correctAnswerCount: Int = 0,
+    questionCount: Int = 0,
+    highestStreak: Int = 0,
+    timeElapsed: Int = 0,
 ) {
     val accuracy = remember {
         derivedStateOf {
@@ -133,17 +134,23 @@ fun EndScreen(
     }.value
 
     Scaffold(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxSize(),
         containerColor = background100,
         bottomBar = {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(16.dp)
             ) {
                 TriviumFilledButton(
+                    modifier = Modifier.fillMaxWidth(),
                     text = "Play Again",
                     onClick = onPlayAgain
                 )
+                Spacer(modifier = Modifier.height(16.dp))
                 TriviumFilledButton(
+                    modifier = Modifier.fillMaxWidth(),
                     text = "Main Menu",
                     border = BorderStroke(1.dp, triviumAccent),
                     state = TriviumFilledButtonState.INACTIVE,
@@ -158,12 +165,13 @@ fun EndScreen(
             Column(
                 modifier = Modifier
                     .padding(contentPadding)
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
                     .fillMaxSize()
                 ,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(0.dp))
                 Text(
                     text = "Game Complete!",
                     color = triviumSecondary,
@@ -212,7 +220,7 @@ fun EndScreen(
                             title = "Correct",
                             iconType = Icons.Outlined.CheckCircleOutline,
                             iconColor = triviumSuccess,
-                            content = "$correctAnswerCount"
+                            content = "$correctAnswerCount / $questionCount"
                         )
                     }
                     item {
@@ -246,6 +254,7 @@ fun EndScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(0.dp))
             }
         }
     }

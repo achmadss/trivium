@@ -232,37 +232,34 @@ fun GameScreen(
                         )
                     }
                 }
-
-                if (state.confirmed && state.selectedOption != null) {
-                    val nextQuestionIndex = state.currentQuestionIndex + 1
-                    TriviumFilledButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(16.dp),
-                        text = if (nextQuestionIndex == state.questions.size) "Finish" else "Next Question",
-                        border = BorderStroke(1.dp, triviumAccent),
-                        state = TriviumFilledButtonState.INACTIVE,
-                        onClick = {
-                            if (nextQuestionIndex == state.questions.size) {
-                                onNavigateToEnd()
-                            } else onNextQuestion()
-                        }
-                    )
-                } else {
-                    TriviumFilledButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(16.dp),
-                        text = "Confirm",
-                        onClick = onConfirmAnswer
-                    )
-                }
+                val isLastQuestion = state.currentQuestionIndex + 1 == state.questions.size
                 TriviumFilledButton(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(16.dp),
-                    border = BorderStroke(1.dp, triviumError),
-                    state = TriviumFilledButtonState.INACTIVE,
-                    text = "Give Up",
-                    onClick = onQuit,
+                    text = when {
+                        !state.confirmed -> "Confirm"
+                        isLastQuestion -> "Finish"
+                        else -> "Next Question"
+                    },
+                    border = if (!state.confirmed && state.selectedOption != null) null else BorderStroke(1.dp, triviumAccent),
+                    state = if (!state.confirmed && state.selectedOption != null) TriviumFilledButtonState.ACTIVE else TriviumFilledButtonState.INACTIVE,
+                    onClick = when {
+                        state.confirmed && isLastQuestion -> onNavigateToEnd
+                        state.confirmed -> onNextQuestion
+                        !state.confirmed && state.selectedOption != null -> onConfirmAnswer
+                        else -> { {} }
+                    }
                 )
+                if (!isLastQuestion) {
+                    TriviumFilledButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(16.dp),
+                        border = BorderStroke(1.dp, triviumError),
+                        state = TriviumFilledButtonState.INACTIVE,
+                        text = "Give Up",
+                        onClick = onQuit,
+                    )
+                }
             }
         }
     }
