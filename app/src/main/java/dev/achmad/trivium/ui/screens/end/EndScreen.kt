@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,22 +18,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.Token
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,10 +48,10 @@ import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
 import dev.achmad.trivium.ui.components.achievement.TriviumAchievementListItem
 import dev.achmad.trivium.ui.components.achievement.TriviumAchievementListItemState
-import dev.achmad.trivium.ui.theme.triviumAccentAlt
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
 import dev.achmad.trivium.ui.theme.triviumAccent
+import dev.achmad.trivium.ui.theme.triviumAccentAlt
 import dev.achmad.trivium.ui.theme.triviumDisabledText
 import dev.achmad.trivium.ui.theme.triviumPrimaryDark
 import dev.achmad.trivium.ui.theme.triviumSecondary
@@ -95,6 +88,7 @@ fun NavGraphBuilder.end(
     }
 }
 
+// TODO USE REAL ACHIEVEMENTS
 val dummyUnlockedAchievements = listOf(
     // Easy achievements from different categories
     TriviaAchievement.KNOW_IT_ALL_NOVICE,

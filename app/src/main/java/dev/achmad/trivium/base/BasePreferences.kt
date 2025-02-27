@@ -9,6 +9,7 @@ class BasePreferences(
 ) {
     fun appTheme() = preferenceStore.getEnum(TRIVIUM_PREF.plus("app_theme"), AppTheme.SYSTEM)
     fun dynamicColors() = preferenceStore.getBoolean(TRIVIUM_PREF.plus("dynamic_colors"), true)
+    fun achievementData() = preferenceStore.getStringSet(TRIVIUM_PREF.plus("achievements"), emptySet())
 }
 
 enum class AppTheme {

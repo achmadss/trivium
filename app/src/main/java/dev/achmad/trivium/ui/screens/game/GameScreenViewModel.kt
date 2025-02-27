@@ -47,6 +47,22 @@ class GameScreenViewModel @Inject constructor(
     private val _state = MutableStateFlow(GameState())
     val state = _state.asStateFlow()
 
+    fun resetAll() {
+        _state.update {
+            it.copy(
+                timerRunning = false,
+                correctAnswerCount = 0,
+                score = 0,
+                highestStreak = 0,
+                streak = 0,
+                timeElapsed = 0,
+                questions = emptyList(),
+                selectedOption = null,
+                currentQuestion = null,
+            )
+        }
+    }
+
     fun selectOption(option: String) {
         _state.update { it.copy(selectedOption = option) }
     }
@@ -71,15 +87,21 @@ class GameScreenViewModel @Inject constructor(
         }
     }
 
-    private fun startTimer() {
+    fun startTimer() {
+        _state.update { it.copy(timerRunning = true) }
         timerJob?.cancel()
         timerJob = null
         timerJob = viewModelScope.launch {
             while (_state.value.timerRunning) {
                 delay(1000)
-                _state.update { it.copy(timeElapsed = it.timeElapsed + 1) }
+                if (_state.value.timerRunning) {
+                    _state.update { it.copy(timeElapsed = it.timeElapsed + 1) }
+                }
             }
         }
+    }
+    fun pauseTimer() {
+        _state.update { it.copy(timerRunning = false) }
     }
 
     fun stopTimer() {
@@ -93,13 +115,15 @@ class GameScreenViewModel @Inject constructor(
         val nextQuestion = state.value.questions[nextQuestionIndex]
         val nextOptions = nextQuestion.options
 
-        _state.update { it.copy(
-            currentQuestion = nextQuestion,
-            currentQuestionIndex = nextQuestionIndex,
-            currentOptions = nextOptions,
-            selectedOption = null,
-            confirmed = false
-        ) }
+        _state.update {
+            it.copy(
+                currentQuestion = nextQuestion,
+                currentQuestionIndex = nextQuestionIndex,
+                currentOptions = nextOptions,
+                selectedOption = null,
+                confirmed = false
+            )
+        }
     }
 
     fun startGame(
@@ -139,6 +163,7 @@ class GameScreenViewModel @Inject constructor(
                                     confirmed = false,
                                     streak = 0,
                                     score = 0,
+                                    timeElapsed = 0,
                                 )
                             }
                         }

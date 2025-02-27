@@ -34,9 +34,9 @@ import androidx.navigation.compose.composable
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
-import dev.achmad.trivium.ui.theme.triviumAccent
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.background80
+import dev.achmad.trivium.ui.theme.triviumAccent
 import dev.achmad.trivium.ui.theme.triviumSecondary
 import kotlinx.serialization.Serializable
 

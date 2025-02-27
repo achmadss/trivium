@@ -7,4 +7,5 @@ class OpenTriviaDatabasePreference(
     private val preferenceStore: PreferenceStore
 ) {
     fun sessionToken() = preferenceStore.getString(OPEN_TRIVIA_DATABASE_PREF.plus("token"))
+    fun latestAPICallTimeStamp() = preferenceStore.getLong(OPEN_TRIVIA_DATABASE_PREF.plus("latest_api_call_timestamp"), -1L)
 }
