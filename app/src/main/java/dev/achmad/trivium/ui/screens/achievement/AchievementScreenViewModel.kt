@@ -18,14 +18,15 @@ data class AchievementState(
 @HiltViewModel
 class AchievementScreenViewModel @Inject constructor(
     private val preference: TriviumAchievementPreference
-): ViewModel() {
+) : ViewModel() {
     private val _state = MutableStateFlow(AchievementState())
     val state = _state.asStateFlow()
 
     fun getAchievements() {
-        val unlockedAchievementIds = preference.collectedAchievements().get().mapNotNull { idString ->
-            idString.toIntOrNull()
-        }.toSet()
+        val unlockedAchievementIds =
+            preference.collectedAchievements().get().mapNotNull { idString ->
+                idString.toIntOrNull()
+            }.toSet()
 
         val unlocked = TriviaAchievement.entries.filter { achievement ->
             unlockedAchievementIds.contains(achievement.id)

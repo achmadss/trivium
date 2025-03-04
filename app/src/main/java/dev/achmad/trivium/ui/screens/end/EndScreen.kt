@@ -40,9 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -62,7 +62,6 @@ import dev.achmad.trivium.ui.theme.triviumPrimaryDark
 import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.theme.triviumSuccess
 import dev.achmad.trivium.ui.theme.triviumWarning
-import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
@@ -84,7 +83,7 @@ fun NavGraphBuilder.end(
 ) {
     composable<EndRoute> { backStackEntry ->
         val data = backStackEntry.toRoute<EndRoute>()
-        val viewModel: EndScreenViewModel = activityViewModel()
+        val viewModel: EndScreenViewModel = viewModel()
         val state by viewModel.state.collectAsState()
 
         EndScreen(
@@ -164,8 +163,7 @@ fun EndScreen(
                 modifier = Modifier
                     .padding(contentPadding)
                     .padding(horizontal = 16.dp)
-                    .fillMaxSize()
-                ,
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -278,6 +276,7 @@ fun EndScreen(
                             }
                         }
                     }
+
                     else -> {
                         Text(
                             modifier = Modifier.align(Alignment.Start),
@@ -311,8 +310,7 @@ private fun TriviumEndScreenIconLabel(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(background80)
-            .padding(16.dp)
-        ,
+            .padding(16.dp),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)

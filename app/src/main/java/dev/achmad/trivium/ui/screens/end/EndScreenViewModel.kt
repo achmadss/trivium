@@ -1,6 +1,5 @@
 package dev.achmad.trivium.ui.screens.end
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.achmad.core.model.achievement.TriviaAchievement
@@ -20,7 +19,7 @@ data class EndState(
 @HiltViewModel
 class EndScreenViewModel @Inject constructor(
     private val preference: TriviumAchievementPreference
-): ViewModel() {
+) : ViewModel() {
     private val _state = MutableStateFlow(EndState())
     val state = _state.asStateFlow()
 
@@ -30,11 +29,15 @@ class EndScreenViewModel @Inject constructor(
         correctAnswerCount: Int
     ) {
         if (correctAnswerCount == 20) {
-            val achievements = TriviaAchievement.getByArgs(category.displayName, difficulty) // extra conditions
+            val achievements = TriviaAchievement.getByArgs(
+                category = category,
+                difficulty = difficulty
+            ) // extra conditions
 
-            val currentAchievements = preference.collectedAchievements().get().mapNotNull { idString ->
-                idString.toIntOrNull()
-            }.toSet()
+            val currentAchievements =
+                preference.collectedAchievements().get().mapNotNull { idString ->
+                    idString.toIntOrNull()
+                }.toSet()
             val newAchievements = achievements.filter { achievement ->
                 !currentAchievements.contains(achievement.id)
             }
@@ -47,10 +50,12 @@ class EndScreenViewModel @Inject constructor(
                 val updatedAchievements = currentAchievements.toMutableSet().apply {
                     addAll(newAchievements.map { it.id })
                 }
-                preference.collectedAchievements().set(updatedAchievements.map { it.toString() }.toSet())
+                preference.collectedAchievements()
+                    .set(updatedAchievements.map { it.toString() }.toSet())
             }
         } else {
-            val achievements = TriviaAchievement.getByArgs(category.displayName, difficulty)
+            val achievements =
+                TriviaAchievement.getByArgs(category = category, difficulty = difficulty)
             _state.update {
                 it.copy(
                     achievementProgress = achievements

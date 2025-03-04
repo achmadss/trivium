@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.achmad.trivium.ui.components.TriviumTopBar
@@ -25,7 +26,6 @@ import dev.achmad.trivium.ui.components.achievement.TriviumAchievementListItem
 import dev.achmad.trivium.ui.components.achievement.TriviumAchievementListItemState
 import dev.achmad.trivium.ui.theme.background100
 import dev.achmad.trivium.ui.theme.triviumPrimaryDark
-import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,7 +35,7 @@ fun NavGraphBuilder.achievement(
     onBack: () -> Unit,
 ) {
     composable<AchievementRoute> {
-        val viewModel: AchievementScreenViewModel = activityViewModel()
+        val viewModel: AchievementScreenViewModel = viewModel()
         val state by viewModel.state.collectAsState()
 
         AchievementScreen(

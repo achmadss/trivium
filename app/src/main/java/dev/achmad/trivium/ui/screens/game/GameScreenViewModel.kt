@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.achmad.core.model.achievement.TriviaAchievement
 import dev.achmad.core.model.category.TriviaCategory
 import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.core.model.mode.TriviaMode
@@ -13,7 +12,6 @@ import dev.achmad.core.network.APICallResult
 import dev.achmad.core.unknownError
 import dev.achmad.data.api.opentdb.model.response.trivia.GetTriviaResponse
 import dev.achmad.data.api.opentdb.repository.OpenTriviaDatabaseRepository
-import dev.achmad.trivium.ui.components.achievement.preference.TriviumAchievementPreference
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +40,7 @@ data class GameState(
 @HiltViewModel
 class GameScreenViewModel @Inject constructor(
     private val openTriviaDatabaseRepository: OpenTriviaDatabaseRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private var timerJob: Job? = null
 
@@ -76,7 +74,7 @@ class GameScreenViewModel @Inject constructor(
             currentState.copy(
                 confirmed = true,
                 score = if (isCorrect) {
-                    currentState.score + when(difficulty) {
+                    currentState.score + when (difficulty) {
                         TriviaDifficulty.EASY -> 100
                         TriviaDifficulty.NORMAL -> 150
                         TriviaDifficulty.HARD -> 200
@@ -102,6 +100,7 @@ class GameScreenViewModel @Inject constructor(
             }
         }
     }
+
     fun pauseTimer() {
         _state.update { it.copy(timerRunning = false) }
     }
@@ -140,7 +139,7 @@ class GameScreenViewModel @Inject constructor(
             if (requestSessionTokenResult is APICallResult.Error) {
                 throw requestSessionTokenResult.error
             }
-            when(mode) {
+            when (mode) {
                 TriviaMode.CASUAL -> {
                     val getTriviaResult = openTriviaDatabaseRepository.getTrivia(
                         amount = 20,
@@ -148,7 +147,7 @@ class GameScreenViewModel @Inject constructor(
                         difficulty = difficulty,
                         type = type
                     )
-                    when(getTriviaResult) {
+                    when (getTriviaResult) {
                         is APICallResult.Success -> {
                             val data = getTriviaResult.data.results.map {
                                 it.copy(
@@ -169,11 +168,13 @@ class GameScreenViewModel @Inject constructor(
                                 )
                             }
                         }
+
                         is APICallResult.Error -> {
                             throw getTriviaResult.error
                         }
                     }
                 }
+
                 TriviaMode.TIME_ATTACK -> {
                     // TODO NEW MODE
                 }
@@ -183,7 +184,8 @@ class GameScreenViewModel @Inject constructor(
             Log.e("ASD", "Game Started")
         } catch (e: Exception) {
             _state.update {
-                it.copy(errorMessage = e.message ?: unknownError, loading = false) }
+                it.copy(errorMessage = e.message ?: unknownError, loading = false)
+            }
             Log.e("ASD", "${e.message}")
         }
     }

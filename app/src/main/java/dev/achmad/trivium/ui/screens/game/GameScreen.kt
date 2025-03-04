@@ -89,14 +89,14 @@ data class GameRoute(
 fun NavGraphBuilder.game(
     onQuit: () -> Unit,
     onNavigateToEnd: (
-        score:Int,
-        correctAnswerCount:Int,
-        questionCount:Int,
-        highestStreak:Int,
-        timeElapsed:Int,
+        score: Int,
+        correctAnswerCount: Int,
+        questionCount: Int,
+        highestStreak: Int,
+        timeElapsed: Int,
         difficulty: TriviaDifficulty,
         category: TriviaCategory
-            ) -> Unit
+    ) -> Unit
 ) {
     composable<GameRoute> { backStackEntry ->
         val data = backStackEntry.toRoute<GameRoute>()
@@ -175,8 +175,7 @@ fun GameScreen(
             if (showGiveUpDialog) {
                 showGiveUpDialog = false
                 onGiveUpRequest()
-            }
-            else {
+            } else {
                 showGiveUpDialog = true
                 onGiveUpRequest()
             }
@@ -214,7 +213,7 @@ fun GameScreen(
     }
     if (state.questions.isEmpty()) showErrorDialog = true
 
-    Scaffold (
+    Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         containerColor = background100,
@@ -234,8 +233,7 @@ fun GameScreen(
                 modifier = Modifier
                     .padding(contentPadding)
                     .padding(16.dp)
-                    .fillMaxSize()
-                ,
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -250,8 +248,7 @@ fun GameScreen(
                         .fillMaxWidth()
                         .defaultMinSize(minHeight = 256.dp)
                         .background(background80)
-                        .padding(16.dp)
-                    ,
+                        .padding(16.dp),
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
@@ -282,9 +279,11 @@ fun GameScreen(
                                         TriviumGameOptionButtonState.INCORRECT
                                     }
                                 }
+
                                 state.confirmed && item == state.currentQuestion?.correctAnswer -> {
                                     TriviumGameOptionButtonState.CORRECT
                                 }
+
                                 else -> TriviumGameOptionButtonState.IDLE
                             },
                             onClick = {
@@ -304,13 +303,18 @@ fun GameScreen(
                         isLastQuestion -> "Finish"
                         else -> "Next Question"
                     },
-                    border = if (!state.confirmed && state.selectedOption != null) null else BorderStroke(1.dp, triviumAccent),
+                    border = if (!state.confirmed && state.selectedOption != null) null else BorderStroke(
+                        1.dp,
+                        triviumAccent
+                    ),
                     state = if (!state.confirmed && state.selectedOption != null) TriviumFilledButtonState.ACTIVE else TriviumFilledButtonState.INACTIVE,
                     onClick = when {
                         state.confirmed && isLastQuestion -> onNavigateToEnd
                         state.confirmed -> onNextQuestion
                         !state.confirmed && state.selectedOption != null -> onConfirmAnswer
-                        else -> { {} }
+                        else -> {
+                            {}
+                        }
                     }
                 )
                 if (!isLastQuestion) {
@@ -336,7 +340,7 @@ fun GameScreen(
                         onDismissRequest = {
                             onGiveUpDeny()
                             showGiveUpDialog = false
-                                           },
+                        },
                         confirmText = "Yes",
                         onConfirmRequest = {
                             onGiveUpConfirm()
@@ -362,8 +366,7 @@ private fun TriviumGameAppBar(
             .bottomBorder(1.dp, triviumPrimaryDark)
             .background(background100)
             .statusBarsPadding()
-            .padding(16.dp)
-        ,
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -451,8 +454,7 @@ private fun TriviumGameOptionButton(
         Box(
             modifier = modifier
                 .clickable { onClick() }
-                .padding(16.dp)
-            ,
+                .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -499,15 +501,13 @@ private fun TriviumGameMinimalDialog(
                         .onGloballyPositioned { coordinates ->
                             rowWidth.intValue = coordinates.size.width
                         }
-                        .padding(16.dp)
-                    ,
+                        .padding(16.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         modifier = Modifier
-                            .size(36.dp)
-                        ,
+                            .size(36.dp),
                         imageVector = icon,
                         contentDescription = null,
                         tint = iconColor

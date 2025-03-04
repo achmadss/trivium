@@ -60,7 +60,7 @@ fun TriviumAchievementListItem(
     maxProgress: Int? = null,
     state: TriviumAchievementListItemState = TriviumAchievementListItemState.INACTIVE,
 ) {
-    val colors = when(state) {
+    val colors = when (state) {
         TriviumAchievementListItemState.ACTIVE -> {
             TriviumAchievementListItemColors(
                 backgroundColor = background80,
@@ -70,6 +70,7 @@ fun TriviumAchievementListItem(
                 iconBackgroundColor = background40,
             )
         }
+
         TriviumAchievementListItemState.INACTIVE -> {
             TriviumAchievementListItemColors(
                 backgroundColor = background80.transparency(),
@@ -138,7 +139,7 @@ fun TriviumAchievementListItem(
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(color.iconBackgroundColor)
                         ) {
-                            val percentage: Float = progress.toFloat()/maxProgress
+                            val percentage: Float = progress.toFloat() / maxProgress
                             Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
