@@ -35,6 +35,7 @@ data class GameState(
     val currentQuestion: GetTriviaResponse.Result? = if (questions.isNotEmpty()) questions[currentQuestionIndex] else null,
     val currentOptions: List<String>? = currentQuestion?.options,
     val confirmed: Boolean = false,
+    val category: TriviaCategory? = null,
 )
 
 @HiltViewModel
@@ -47,21 +48,7 @@ class GameScreenViewModel @Inject constructor(
     private val _state = MutableStateFlow(GameState())
     val state = _state.asStateFlow()
 
-    fun resetAll() {
-        _state.update {
-            it.copy(
-                timerRunning = false,
-                correctAnswerCount = 0,
-                score = 0,
-                highestStreak = 0,
-                streak = 0,
-                timeElapsed = 0,
-                questions = emptyList(),
-                selectedOption = null,
-                currentQuestion = null,
-            )
-        }
-    }
+    fun resetAll() = _state.update { GameState() }
 
     fun selectOption(option: String) {
         _state.update { it.copy(selectedOption = option) }
@@ -139,11 +126,12 @@ class GameScreenViewModel @Inject constructor(
             if (requestSessionTokenResult is APICallResult.Error) {
                 throw requestSessionTokenResult.error
             }
+            val requestCategory = category.orRandom()
             when (mode) {
                 TriviaMode.CASUAL -> {
                     val getTriviaResult = openTriviaDatabaseRepository.getTrivia(
                         amount = 20,
-                        category = category,
+                        category = requestCategory,
                         difficulty = difficulty,
                         type = type
                     )
@@ -159,12 +147,7 @@ class GameScreenViewModel @Inject constructor(
                                     questions = data,
                                     currentQuestion = data.first(),
                                     currentOptions = data.first().options,
-                                    currentQuestionIndex = 0,
-                                    selectedOption = null,
-                                    confirmed = false,
-                                    streak = 0,
-                                    score = 0,
-                                    timeElapsed = 0,
+                                    category = requestCategory
                                 )
                             }
                         }

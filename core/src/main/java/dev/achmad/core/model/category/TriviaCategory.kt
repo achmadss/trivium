@@ -34,9 +34,8 @@ enum class TriviaCategory(
     ENTERTAINMENT_JAPANESE_ANIME_MANGA(31, "Entertainment: Japanese Anime & Manga", R.drawable.japanese),
     ENTERTAINMENT_CARTOON_ANIMATIONS(32, "Entertainment: Cartoon & Animations", R.drawable.animation);
 
-    companion object {
-        fun fromId(id: Int): TriviaCategory? {
-            return entries.find { it.id == id }
-        }
+    fun orRandom(): TriviaCategory {
+        if (id == -1) return entries.filter { it.id != -1 }.random()
+        return this
     }
 }

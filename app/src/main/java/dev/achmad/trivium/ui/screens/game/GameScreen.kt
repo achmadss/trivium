@@ -121,15 +121,17 @@ fun NavGraphBuilder.game(
             },
             onNavigateToEnd = {
                 viewModel.stopTimer()
-                onNavigateToEnd(
-                    state.score,
-                    state.correctAnswerCount,
-                    state.questions.size,
-                    state.highestStreak,
-                    state.timeElapsed,
-                    data.difficulty,
-                    data.category
-                )
+                state.category?.let { category ->
+                    onNavigateToEnd(
+                        state.score,
+                        state.correctAnswerCount,
+                        state.questions.size,
+                        state.highestStreak,
+                        state.timeElapsed,
+                        data.difficulty,
+                        category
+                    )
+                }
             },
             onConfirmAnswer = {
                 viewModel.onConfirm(data.difficulty)
@@ -138,6 +140,7 @@ fun NavGraphBuilder.game(
                 viewModel.onNextQuestion()
             },
             onStartGame = {
+                viewModel.resetAll()
                 viewModel.startGame(
                     mode = data.mode,
                     difficulty = data.difficulty,
@@ -182,18 +185,12 @@ fun GameScreen(
         }
     )
 
-    if (state.loading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = triviumPrimaryDark
-            )
+    LaunchedEffect(state.errorMessage) {
+        if (state.errorMessage.isNotBlank()) {
+            showErrorDialog = true
         }
-        return
     }
+
     if (showErrorDialog) {
         TriviumGameMinimalDialog(
             icon = Icons.Outlined.Error,
@@ -211,146 +208,158 @@ fun GameScreen(
             },
         )
     }
-    if (state.questions.isEmpty()) showErrorDialog = true
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        containerColor = background100,
-        topBar = {
-            TriviumGameAppBar(
-                score = state.score,
-                streak = state.streak,
-                timeElapsed = state.timeElapsed,
+    if (state.loading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = triviumPrimaryDark
             )
         }
-    ) { contentPadding ->
-        Box(
+    } else {
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize(),
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Question ${state.currentQuestionIndex + 1}",
-                    color = triviumSecondary,
-                    style = MaterialTheme.typography.titleMedium
+            containerColor = background100,
+            topBar = {
+                TriviumGameAppBar(
+                    score = state.score,
+                    streak = state.streak,
+                    timeElapsed = state.timeElapsed,
                 )
-                Box(
+            }
+        ) { contentPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                Column(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = 256.dp)
-                        .background(background80)
-                        .padding(16.dp),
+                        .padding(contentPadding)
+                        .padding(16.dp)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = state.currentQuestion?.question ?: "",
+                        text = "Question ${state.currentQuestionIndex + 1}",
                         color = triviumSecondary,
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = TextAlign.Center
+                        style = MaterialTheme.typography.titleMedium
                     )
-                }
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = 256.dp)
+                            .background(background80)
+                            .padding(16.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = state.currentQuestion?.question ?: "",
+                            color = triviumSecondary,
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
-                state.currentOptions?.let {
-                    TriviumNonLazyGrid(
-                        columns = 2,
-                        itemCount = state.currentOptions.size,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) { index ->
-                        val item = state.currentOptions[index]
-                        TriviumGameOptionButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = item,
-                            selected = state.selectedOption == item,
-                            state = when {
-                                state.confirmed && item == state.selectedOption -> {
-                                    if (item == state.currentQuestion?.correctAnswer) {
+                    state.currentOptions?.let {
+                        TriviumNonLazyGrid(
+                            columns = 2,
+                            itemCount = state.currentOptions.size,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) { index ->
+                            val item = state.currentOptions[index]
+                            TriviumGameOptionButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = item,
+                                selected = state.selectedOption == item,
+                                state = when {
+                                    state.confirmed && item == state.selectedOption -> {
+                                        if (item == state.currentQuestion?.correctAnswer) {
+                                            TriviumGameOptionButtonState.CORRECT
+                                        } else {
+                                            TriviumGameOptionButtonState.INCORRECT
+                                        }
+                                    }
+
+                                    state.confirmed && item == state.currentQuestion?.correctAnswer -> {
                                         TriviumGameOptionButtonState.CORRECT
-                                    } else {
-                                        TriviumGameOptionButtonState.INCORRECT
+                                    }
+
+                                    else -> TriviumGameOptionButtonState.IDLE
+                                },
+                                onClick = {
+                                    if (!state.confirmed) {
+                                        onSelectOption(item)
                                     }
                                 }
-
-                                state.confirmed && item == state.currentQuestion?.correctAnswer -> {
-                                    TriviumGameOptionButtonState.CORRECT
-                                }
-
-                                else -> TriviumGameOptionButtonState.IDLE
-                            },
+                            )
+                        }
+                    }
+                    val isLastQuestion = state.currentQuestionIndex + 1 == state.questions.size
+                    TriviumFilledButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(16.dp),
+                        text = when {
+                            !state.confirmed -> "Confirm"
+                            isLastQuestion -> "Finish"
+                            else -> "Next Question"
+                        },
+                        border = if (!state.confirmed && state.selectedOption != null) null else BorderStroke(
+                            1.dp,
+                            triviumAccent
+                        ),
+                        state = if (!state.confirmed && state.selectedOption != null) TriviumFilledButtonState.ACTIVE else TriviumFilledButtonState.INACTIVE,
+                        onClick = when {
+                            state.confirmed && isLastQuestion -> onNavigateToEnd
+                            state.confirmed -> onNextQuestion
+                            !state.confirmed && state.selectedOption != null -> onConfirmAnswer
+                            else -> {
+                                {}
+                            }
+                        }
+                    )
+                    if (!isLastQuestion) {
+                        TriviumFilledButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentPadding = PaddingValues(16.dp),
+                            border = BorderStroke(1.dp, triviumError),
+                            state = TriviumFilledButtonState.INACTIVE,
+                            text = "Give Up",
                             onClick = {
-                                if (!state.confirmed) {
-                                    onSelectOption(item)
-                                }
+                                showGiveUpDialog = true
+                                onGiveUpRequest()
+                            }
+                        )
+                    }
+                    if (showGiveUpDialog) {
+                        TriviumGameMinimalDialog(
+                            icon = Icons.Outlined.QuestionMark,
+                            iconColor = triviumWarning,
+                            title = "Give Up",
+                            text = "Are you sure you want to give up?",
+                            dismissText = "No",
+                            onDismissRequest = {
+                                onGiveUpDeny()
+                                showGiveUpDialog = false
+                            },
+                            confirmText = "Yes",
+                            onConfirmRequest = {
+                                onGiveUpConfirm()
+                                showGiveUpDialog = false
                             }
                         )
                     }
                 }
-                val isLastQuestion = state.currentQuestionIndex + 1 == state.questions.size
-                TriviumFilledButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(16.dp),
-                    text = when {
-                        !state.confirmed -> "Confirm"
-                        isLastQuestion -> "Finish"
-                        else -> "Next Question"
-                    },
-                    border = if (!state.confirmed && state.selectedOption != null) null else BorderStroke(
-                        1.dp,
-                        triviumAccent
-                    ),
-                    state = if (!state.confirmed && state.selectedOption != null) TriviumFilledButtonState.ACTIVE else TriviumFilledButtonState.INACTIVE,
-                    onClick = when {
-                        state.confirmed && isLastQuestion -> onNavigateToEnd
-                        state.confirmed -> onNextQuestion
-                        !state.confirmed && state.selectedOption != null -> onConfirmAnswer
-                        else -> {
-                            {}
-                        }
-                    }
-                )
-                if (!isLastQuestion) {
-                    TriviumFilledButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(16.dp),
-                        border = BorderStroke(1.dp, triviumError),
-                        state = TriviumFilledButtonState.INACTIVE,
-                        text = "Give Up",
-                        onClick = {
-                            showGiveUpDialog = true
-                            onGiveUpRequest()
-                        }
-                    )
-                }
-                if (showGiveUpDialog) {
-                    TriviumGameMinimalDialog(
-                        icon = Icons.Outlined.QuestionMark,
-                        iconColor = triviumWarning,
-                        title = "Give Up",
-                        text = "Are you sure you want to give up?",
-                        dismissText = "No",
-                        onDismissRequest = {
-                            onGiveUpDeny()
-                            showGiveUpDialog = false
-                        },
-                        confirmText = "Yes",
-                        onConfirmRequest = {
-                            onGiveUpConfirm()
-                            showGiveUpDialog = false
-                        }
-                    )
-                }
             }
         }
     }
+
 }
 
 @Composable
