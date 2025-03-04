@@ -10,7 +10,7 @@ enum class TriviaCategory(
 ) {
     RANDOM(-1, "Random", R.drawable.casino),
     GENERAL_KNOWLEDGE(9, "General Knowledge", R.drawable.quiz),
-        ENTERTAINMENT_BOOKS(10, "Entertainment: Books", R.drawable.book),
+    ENTERTAINMENT_BOOKS(10, "Entertainment: Books", R.drawable.book),
     ENTERTAINMENT_FILM(11, "Entertainment: Film", R.drawable.movie),
     ENTERTAINMENT_MUSIC(12, "Entertainment: Music", R.drawable.genres),
     ENTERTAINMENT_MUSICALS_THEATRES(13, "Entertainment: Musicals & Theatres", R.drawable.artist),

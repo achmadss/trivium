@@ -28,7 +28,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,12 +40,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import dev.achmad.core.model.achievement.TriviaAchievement
+import dev.achmad.core.model.category.TriviaCategory
+import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.trivium.R
 import dev.achmad.trivium.ui.components.TriviumFilledButton
 import dev.achmad.trivium.ui.components.TriviumFilledButtonState
@@ -57,6 +62,7 @@ import dev.achmad.trivium.ui.theme.triviumPrimaryDark
 import dev.achmad.trivium.ui.theme.triviumSecondary
 import dev.achmad.trivium.ui.theme.triviumSuccess
 import dev.achmad.trivium.ui.theme.triviumWarning
+import dev.achmad.trivium.ui.utils.activityViewModel
 import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
@@ -67,6 +73,9 @@ data class EndRoute(
     val questionCount: Int,
     val highestStreak: Int,
     val timeElapsed: Int,
+    val selectedCategory: TriviaCategory,
+    val selectedDifficulty: TriviaDifficulty,
+//    val selectedMode: TriviaMode
 )
 
 fun NavGraphBuilder.end(
@@ -75,40 +84,32 @@ fun NavGraphBuilder.end(
 ) {
     composable<EndRoute> { backStackEntry ->
         val data = backStackEntry.toRoute<EndRoute>()
+        val viewModel: EndScreenViewModel = activityViewModel()
+        val state by viewModel.state.collectAsState()
 
         EndScreen(
+            state = state,
             score = data.score,
             correctAnswerCount = data.correctAnswerCount,
             questionCount = data.questionCount,
             highestStreak = data.highestStreak,
             timeElapsed = data.timeElapsed,
             onPlayAgain = onPlayAgain,
-            onNavigateToMainMenu = onNavigateToMainMenu
+            onNavigateToMainMenu = onNavigateToMainMenu,
+            onEndDisplay = {
+                viewModel.achievementHandler(
+                    data.selectedDifficulty,
+                    data.selectedCategory,
+                    data.correctAnswerCount
+                )
+            }
         )
     }
 }
 
-// TODO USE REAL ACHIEVEMENTS
-val dummyUnlockedAchievements = listOf(
-    // Easy achievements from different categories
-    TriviaAchievement.KNOW_IT_ALL_NOVICE,
-    TriviaAchievement.BOOKWORM_BEGINNER,
-    TriviaAchievement.RHYTHM_ROOKIE,
-
-    // Medium achievements
-    TriviaAchievement.WORLD_EXPLORER,
-    TriviaAchievement.CODE_WARRIOR,
-
-    // Hard achievement
-    TriviaAchievement.CINEMA_CONNOISSEUR,
-
-    // Recently unlocked achievements (you might want to show these differently)
-    TriviaAchievement.ANIME_APPRENTICE,
-    TriviaAchievement.TECH_TRAINEE
-)
-
 @Composable
 fun EndScreen(
+    state: EndState = EndState(),
     onPlayAgain: () -> Unit = {},
     onNavigateToMainMenu: () -> Unit = {},
     score: Int = 0,
@@ -116,6 +117,7 @@ fun EndScreen(
     questionCount: Int = 0,
     highestStreak: Int = 0,
     timeElapsed: Int = 0,
+    onEndDisplay: () -> Unit = {}
 ) {
     val accuracy = remember {
         derivedStateOf {
@@ -126,6 +128,8 @@ fun EndScreen(
                 .roundToInt()
         }
     }.value
+
+    LaunchedEffect(Unit) { onEndDisplay() }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -226,26 +230,68 @@ fun EndScreen(
                         )
                     }
                 }
-                val unlockedAchievement = dummyUnlockedAchievements
-                if (unlockedAchievement.isNotEmpty()) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Start),
-                        text = "Achievements Unlocked",
-                        color = triviumSecondary,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(unlockedAchievement) { item ->
-                            TriviumAchievementListItem(
-                                title = stringResource(id = item.title),
-                                subtitle = stringResource(id = item.description),
-                                state = TriviumAchievementListItemState.ACTIVE
-                            )
+                val unlockedAchievements = state.achievementsObtained
+                val achievementProgress = state.achievementProgress
+                when {
+                    unlockedAchievements.isNotEmpty() -> {
+                        Text(
+                            modifier = Modifier.align(Alignment.Start),
+                            text = "Achievements Unlocked",
+                            color = triviumSecondary,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(unlockedAchievements) { item ->
+                                TriviumAchievementListItem(
+                                    title = stringResource(id = item.title),
+                                    subtitle = stringResource(id = item.description),
+                                    state = TriviumAchievementListItemState.ACTIVE
+                                )
+                            }
                         }
+                    }
+
+                    achievementProgress.isNotEmpty() -> {
+                        Text(
+                            modifier = Modifier.align(Alignment.Start),
+                            text = "Achievement Progress",
+                            color = triviumSecondary,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(achievementProgress) { item ->
+                                TriviumAchievementListItem(
+                                    title = stringResource(id = item.title),
+                                    subtitle = stringResource(id = item.description),
+                                    state = TriviumAchievementListItemState.ACTIVE,
+                                    progress = correctAnswerCount,
+                                    maxProgress = 20
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        Text(
+                            modifier = Modifier.align(Alignment.Start),
+                            text = "Achievements Unlocked",
+                            color = triviumSecondary,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            text = ":( No achievements unlocked, better luck next time!",
+                            color = triviumSecondary,
+                            style = MaterialTheme.typography.titleLarge
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(0.dp))

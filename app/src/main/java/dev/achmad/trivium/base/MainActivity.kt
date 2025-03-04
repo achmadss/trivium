@@ -93,14 +93,16 @@ class MainActivity : ComponentActivity() {
                         onQuit = {
                             navController.navigateUp()
                         },
-                        onNavigateToEnd = { score, correctAnswerCount, questionCount, highestStreak, timeElapsed ->
+                        onNavigateToEnd = { score, correctAnswerCount, questionCount, highestStreak, timeElapsed, difficulty, category ->
                             navController.navigate(
                                 EndRoute(
                                     score = score,
                                     correctAnswerCount = correctAnswerCount,
                                     questionCount = questionCount,
                                     highestStreak = highestStreak,
-                                    timeElapsed = timeElapsed
+                                    timeElapsed = timeElapsed,
+                                    selectedDifficulty = difficulty,
+                                    selectedCategory = category
                                 )
                             )
                         }

@@ -93,7 +93,9 @@ fun NavGraphBuilder.game(
         correctAnswerCount:Int,
         questionCount:Int,
         highestStreak:Int,
-        timeElapsed:Int
+        timeElapsed:Int,
+        difficulty: TriviaDifficulty,
+        category: TriviaCategory
             ) -> Unit
 ) {
     composable<GameRoute> { backStackEntry ->
@@ -124,7 +126,9 @@ fun NavGraphBuilder.game(
                     state.correctAnswerCount,
                     state.questions.size,
                     state.highestStreak,
-                    state.timeElapsed
+                    state.timeElapsed,
+                    data.difficulty,
+                    data.category
                 )
             },
             onConfirmAnswer = {
@@ -209,6 +213,7 @@ fun GameScreen(
         )
     }
     if (state.questions.isEmpty()) showErrorDialog = true
+
     Scaffold (
         modifier = Modifier
             .fillMaxSize(),

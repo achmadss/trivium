@@ -1,11 +1,14 @@
 package dev.achmad.trivium.ui.components.achievement
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -53,6 +56,8 @@ fun TriviumAchievementListItem(
     title: String,
     subtitle: String,
     icon: ImageVector = ImageVector.vectorResource(R.drawable.trophy),
+    progress: Int? = null,
+    maxProgress: Int? = null,
     state: TriviumAchievementListItemState = TriviumAchievementListItemState.INACTIVE,
 ) {
     val colors = when(state) {
@@ -85,37 +90,70 @@ fun TriviumAchievementListItem(
                 .background(color.backgroundColor)
                 .padding(16.dp),
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Box(
+                Row(
                     modifier = Modifier
-                        .clip(CircleShape)
-                        .size(36.dp)
-                        .background(color.iconBackgroundColor),
+                        .fillMaxWidth()
                 ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
+                    Box(
                         modifier = Modifier
-                            .size(18.dp)
-                            .align(Alignment.Center),
-                        tint = color.iconColor,
-                    )
+                            .clip(CircleShape)
+                            .size(36.dp)
+                            .background(color.iconBackgroundColor),
+                    ) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .align(Alignment.Center),
+                            tint = color.iconColor,
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = title,
+                            color = color.titleTextColor,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = subtitle,
+                            color = color.subtitleTextColor,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Text(
-                        text = title,
-                        color = color.titleTextColor,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = subtitle,
-                        color = color.subtitleTextColor,
-                        style = MaterialTheme.typography.labelMedium
-                    )
+                if (progress != null && maxProgress != null) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(16.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(color.iconBackgroundColor)
+                        ) {
+                            val percentage: Float = progress.toFloat()/maxProgress
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .fillMaxWidth(percentage)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(color.iconColor)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "$progress/$maxProgress",
+                            color = color.titleTextColor,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
         }
@@ -141,5 +179,8 @@ private fun PreviewTriviumAchievementListItemInactive() {
         title = "Achievement",
         subtitle = "subtitle",
         icon = ImageVector.vectorResource(R.drawable.trophy),
+        progress = 6,
+        maxProgress = 20,
+        state = TriviumAchievementListItemState.INACTIVE
     )
 }

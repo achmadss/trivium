@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.achmad.core.model.achievement.TriviaAchievement
 import dev.achmad.core.model.category.TriviaCategory
 import dev.achmad.core.model.difficulty.TriviaDifficulty
 import dev.achmad.core.model.mode.TriviaMode
@@ -12,6 +13,7 @@ import dev.achmad.core.network.APICallResult
 import dev.achmad.core.unknownError
 import dev.achmad.data.api.opentdb.model.response.trivia.GetTriviaResponse
 import dev.achmad.data.api.opentdb.repository.OpenTriviaDatabaseRepository
+import dev.achmad.trivium.ui.components.achievement.preference.TriviumAchievementPreference
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -173,7 +175,7 @@ class GameScreenViewModel @Inject constructor(
                     }
                 }
                 TriviaMode.TIME_ATTACK -> {
-                    // TODO dika
+                    // TODO NEW MODE
                 }
             }
             _state.update { it.copy(loading = false, timerRunning = true, timeElapsed = 0) }
