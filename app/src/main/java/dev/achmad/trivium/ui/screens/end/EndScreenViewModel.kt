@@ -28,7 +28,7 @@ class EndScreenViewModel @Inject constructor(
         category: TriviaCategory,
         correctAnswerCount: Int
     ) {
-        if (correctAnswerCount == 20) {
+        if (correctAnswerCount >= 20) {
             val achievements = TriviaAchievement.getByArgs(
                 category = category,
                 difficulty = difficulty
